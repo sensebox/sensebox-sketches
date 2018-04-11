@@ -1,4 +1,4 @@
-FROM debian:9.4-slim
+FROM debian:9.4-slim as builder
 
 ENV IDE_VERSION=1.8.5 \
   SENSEBOXCORE_VERSION=1.0.4 \
@@ -17,13 +17,29 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip senseBox_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
   && arduino --install-boards arduino:samd \
-  && mkdir -p /arduino-ide/builds \
   && mkdir -p /arduino-ide/build-cache \
   && apt-get purge -y xz-utils unzip wget \
-  && apt-get autoremove \
+  && apt-get autoremove -y \
   && apt-get clean \
   && rm -rf arduino-$IDE_VERSION-linux64.tar.xz senseBox_Libraries.zip senseBox_Library.zip \
   /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   /arduino-ide/{java,lib,reference,examples}
 
-WORKDIR /arduino-ide
+FROM node:8-slim
+
+WORKDIR /app
+
+ENV PATH=$PATH:/arduino-ide \
+  NODE_ENV=production
+
+COPY --from=builder /root/.arduino15 /root/.arduino15
+COPY --from=builder /arduino-ide /arduino-ide
+
+COPY package.json /app
+COPY yarn.lock /app
+
+RUN yarn install --pure-lockfile --production
+
+COPY src /app/src
+
+CMD ["yarn", "start"]
