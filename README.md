@@ -18,6 +18,21 @@ You can now compile sketches through the exposed HTTP interface. Here is an exam
       --data '{"board":"sensebox-mcu", "sketch":"void setup() {\nSerial.begin(9600);\nSerial.println(\"Hello World\");\n}\nvoid loop() {}"}' \
       http://localhost:3000/compile
 
+### `POST /compile`
+
+Requests should always:
+
+- take the `/compile` route
+- be POST requests
+- have `application/json` as `content-type`
+- contain a valid JSON string with keys `board` and `sketch` with non-empty values.
+
+Possible `board` values are `sensebox-mcu` for the new senseBox MCU and `sensebox` for the old Arduino Uno based senseBox.
+
+The `sketch` value should be a valid Arduino sketch.
+
+Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the response body.
+
 ## In the container
 
 ### Compiling senseBox MCU Sketches Examples
