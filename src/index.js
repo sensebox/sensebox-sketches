@@ -7,12 +7,15 @@ const handler = async function handler (req, res, next) {
   // execute builder with parameters from user
   try {
     const stream = await execBuilder(req._builderParams);
+    stream.on('error', function (err) {
+      return next(err);
+    });
+    res.setHeader('content-type', 'application/octet-stream');
+    stream.pipe(res);
   } catch (err) {
     return next(err);
   }
 
-  res.setHeader('content-type', 'application/octet-stream');
-  stream.pipe(res);
 };
 
 const preRequestValidator = function requestValidator(req, res, next) {

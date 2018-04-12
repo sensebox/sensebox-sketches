@@ -2,6 +2,8 @@ FROM debian:9.4-slim as builder
 
 ENV IDE_VERSION=1.8.5 \
   SENSEBOXCORE_VERSION=1.0.4 \
+  ARDUINO_SAMD_VERSION=1.6.18 \
+  ARDUINO_AVR_VERSION=1.6.21 \
   SENSEBOXCORE_URL=https://github.com/watterott/senseBox-MCU/raw/master/package_sensebox_index.json \
   SENSEBOX_LIBRARIES_URL=https://github.com/sensebox/resources/raw/master/libraries/senseBox_Libraries.zip \
   SENSEBOX_LIBRARY_URL=https://github.com/sensebox/senseBox_library/archive/master.zip \
@@ -16,7 +18,8 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip senseBox_Libraries.zip -d /arduino-ide \
   && unzip senseBox_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
-  && arduino --install-boards arduino:samd \
+  && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
+  && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
   && mkdir -p /arduino-ide/build-cache \
   && apt-get purge -y xz-utils unzip wget \
   && apt-get autoremove -y \
