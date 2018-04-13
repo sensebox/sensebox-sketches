@@ -21,22 +21,19 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
   && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
   && mkdir -p /arduino-ide/build-cache \
+  && mv /root/.arduino15/packages /arduino-ide/packages \
   && apt-get purge -y xz-utils unzip wget \
   && apt-get autoremove -y \
   && apt-get clean \
-  && rm -rf arduino-$IDE_VERSION-linux64.tar.xz senseBox_Libraries.zip senseBox_Library.zip \
-  /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  /arduino-ide/{java,lib,reference,examples}
+  && rm -rf arduino-$IDE_VERSION-linux64.tar.xz senseBox_Libraries.zip senseBox_Library.zip /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+  && bash -c 'rm -rf /arduino-ide/{java,lib,reference,examples,arduino,install.sh,revisions.txt,uninstall.sh}' \
+  && find /arduino-ide -type d -name "examples" -exec rm -rf \;
 
 FROM node:8-slim
 
 WORKDIR /app
 
-ENV PATH=$PATH:/arduino-ide \
-  NODE_ENV=production
-
-COPY --from=builder /root/.arduino15 /root/.arduino15
-COPY --from=builder /arduino-ide /arduino-ide
+ENV NODE_ENV=production
 
 COPY package.json /app
 COPY yarn.lock /app
@@ -44,5 +41,6 @@ COPY yarn.lock /app
 RUN yarn install --pure-lockfile --production
 
 COPY src /app/src
+COPY --from=builder /arduino-ide /app/src/arduino-ide
 
-CMD ["yarn", "start"]
+CMD ["yarn","start"]

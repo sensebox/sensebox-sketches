@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
+    "response-time": "^2.3.2",
     "spawn-promise": "^0.1.8",
     "temp-write": "^3.4.0",
     "tempy": "^0.2.1"

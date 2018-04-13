@@ -1,6 +1,7 @@
 const { execBuilder, validBoards } = require('./builder');
 const express = require('express');
 const app = express();
+const responseTime = require('response-time');
 
 // handle requests
 const handler = async function handler (req, res, next) {
@@ -18,7 +19,7 @@ const handler = async function handler (req, res, next) {
 
 };
 
-const preRequestValidator = function requestValidator(req, res, next) {
+const preRequestValidator = function preRequestValidator (req, res, next) {
   // reject all non POST request
   if (req.method !== 'POST') {
     return next(new Error('Invalid HTTP method. Only POST requests allowed.'));
@@ -55,14 +56,15 @@ const payloadValidator = function payloadValidator (req, res, next) {
   next();
 };
 
-function errorHandler (err, req, res, next) {
+const errorHandler = function errorHandler (err, req, res, next) {
   if (res.headersSent) {
-    return next(err)
+    return next(err);
   }
-  res.status(400).send({ error: err.message })
-}
+  res.status(400).send({ error: err.message });
+};
 
 const startServer = function startServer () {
+  app.use(responseTime());
   app.use(preRequestValidator);
   app.use(express.json());
   app.use(payloadValidator);
@@ -71,7 +73,7 @@ const startServer = function startServer () {
 
   app.post('/compile', handler);
 
-  app.listen(3000, () => console.log('Example app listening on port 3000!'))
+  app.listen(3000, () => console.log('Example app listening on port 3000!'));
 };
 
 startServer();
