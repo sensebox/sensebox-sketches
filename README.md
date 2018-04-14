@@ -18,6 +18,8 @@ You can now compile sketches through the exposed HTTP interface. Here is an exam
       --data '{"board":"sensebox-mcu", "sketch":"void setup() {\nSerial.begin(9600);\nSerial.println(\"Hello World\");\n}\nvoid loop() {}"}' \
       http://localhost:3000/compile
 
+You can also run the container image mutliple times. See [Scaling with docker-compose](#scaling-with-docker-compose)
+
 ### `POST /compile`
 
 Requests should always:
@@ -32,6 +34,18 @@ Possible `board` values are `sensebox-mcu` for the new senseBox MCU and `sensebo
 The `sketch` value should be a valid Arduino sketch.
 
 Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the response body.
+
+## Scaling with docker-compose
+
+Newer versions of docker allows to give the same alias to multiple containers in the same network. We exploit this to run multiple instances at the same time to balance load.
+
+The repository contains a `docker-compose.yml` file which automatically assigns the `compiler` alias to all running containers.
+
+Just start multiple instances using
+
+    docker-compose up -d --scale compiler=4
+
+Then reference the containers by its `compiler` alias and multiple requests will be served by different containers.
 
 ## In the container
 

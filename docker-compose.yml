@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  compiler:
+    image: sensebox/sensebox-sketches
+    networks:
+      - compiler-network
+
+networks:
+  compiler-network:
