@@ -5,6 +5,11 @@ services:
     image: sensebox/sensebox-sketches
     networks:
       - compiler-network
+    volumes:
+      - build-cache:/app/src/arduino-ide/build-cache
 
 networks:
   compiler-network:
+
+volumes:
+  build-cache:
