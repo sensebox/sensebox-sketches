@@ -16,7 +16,8 @@ const HTTPError = function HTTPError ({ code = 500, error = '' }) {
 const defaultHeaders = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Allow': 'POST'
+  'Allow': 'POST',
+  'X-Backend-Server': (require('os').hostname())
 };
 
 const preRequestValidator = function preRequestValidator (req, res, next) {
