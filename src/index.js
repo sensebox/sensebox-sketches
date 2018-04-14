@@ -3,6 +3,7 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const app = connect();
 const responseTime = require('response-time');
+const morgan = require('morgan');
 
 const { execBuilder, validBoards } = require('./builder');
 
@@ -96,6 +97,7 @@ const errorHandler = function errorHandler (err, req, res, next) {
 };
 
 const startServer = function startServer () {
+  app.use(morgan(':date[iso] :res[x-backend-server] :remote-addr :req[x-real-ip] :method :url :response-time[0] :status'));
   app.use(responseTime());
   app.use(preRequestValidator);
   app.use(bodyParser.json());
