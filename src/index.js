@@ -32,6 +32,20 @@ const preRequestValidator = function preRequestValidator (req, res, next) {
     return next(new HTTPError({ code: 404, error: `Cannot serve ${req.url}` }));
   }
 
+  // preflight POST request https://gist.github.com/balupton/3696140
+  if (req.method === 'OPTIONS') {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    if ( req.method === 'OPTIONS' ) {
+      res.writeHead(200);
+      res.end();
+      return;
+    }
+  }
+
   // reject all non POST request
   if (req.method !== 'POST') {
     return next(new HTTPError({ code: 405, error: 'Invalid HTTP method. Only POST requests allowed.' }));
