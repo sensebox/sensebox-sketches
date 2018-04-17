@@ -21,6 +21,21 @@ const defaultHeaders = {
   'X-Backend-Server': (require('os').hostname())
 };
 
+const preflight = function preflight (req, res, next) {
+  // preflight POST request https://gist.github.com/balupton/3696140
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Request-Method', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  if ( req.method === 'OPTIONS' ) {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+
+  next();
+}
+
 const preRequestValidator = function preRequestValidator (req, res, next) {
   // set some headers, just in case
   for (const [ k, v ] of Object.entries(defaultHeaders)) {
@@ -30,20 +45,6 @@ const preRequestValidator = function preRequestValidator (req, res, next) {
   // reject everything not coming through /compile
   if (req.url !== '/compile') {
     return next(new HTTPError({ code: 404, error: `Cannot serve ${req.url}` }));
-  }
-
-  // preflight POST request https://gist.github.com/balupton/3696140
-  if (req.method === 'OPTIONS') {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Request-Method', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    if ( req.method === 'OPTIONS' ) {
-      res.writeHead(200);
-      res.end();
-      return;
-    }
   }
 
   // reject all non POST request
@@ -113,6 +114,7 @@ const errorHandler = function errorHandler (err, req, res, next) {
 const startServer = function startServer () {
   app.use(morgan(':date[iso] :res[x-backend-server] :remote-addr :req[x-real-ip] :method :url :response-time[0] :status'));
   app.use(responseTime());
+  app.use(preflight);
   app.use(preRequestValidator);
   app.use(bodyParser.json());
   app.use(payloadValidator);
