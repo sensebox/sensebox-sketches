@@ -23,12 +23,13 @@ const defaultHeaders = {
 
 const preflight = function preflight (req, res, next) {
   // preflight POST request https://gist.github.com/balupton/3696140
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Origin', 'https://sensebox.de');
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  res.setHeader('Access-Control-Expose-Headers', 'x-backend-server, x-reponse-time');
   if ( req.method === 'OPTIONS' ) {
-    res.writeHead(200);
+    res.writeHead(204);
     res.end();
     return;
   }
