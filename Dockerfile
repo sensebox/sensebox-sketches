@@ -1,7 +1,7 @@
 FROM debian:9.4-slim as builder
 
 ENV IDE_VERSION=1.8.5 \
-  SENSEBOXCORE_VERSION=1.0.4 \
+  SENSEBOXCORE_VERSION=1.0.6 \
   ARDUINO_SAMD_VERSION=1.6.18 \
   ARDUINO_AVR_VERSION=1.6.21 \
   SENSEBOXCORE_URL=https://github.com/watterott/senseBox-MCU/raw/master/package_sensebox_index.json \
