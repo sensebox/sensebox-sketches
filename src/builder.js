@@ -4,7 +4,7 @@ const tempy = require('tempy');
 const fs = require('fs');
 
 const boardFQBNs = {
-  'sensebox-mcu': 'sensebox:samd:sb',
+  'sensebox-mcu': 'sensebox:samd:sb:power=on',
   'sensebox': 'arduino:avr:uno'
 };
 
