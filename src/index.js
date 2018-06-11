@@ -1,23 +1,19 @@
 const connect = require('connect');
 const http = require('http');
+const urlParser = require('url').parse;
 const bodyParser = require('body-parser');
 const app = connect();
 const responseTime = require('response-time');
 const morgan = require('morgan');
 
-const { execBuilder, validBoards } = require('./builder');
-
-const HTTPError = function HTTPError ({ code = 500, error = '' }) {
-  const err = new Error(error);
-  err.statusCode = code;
-
-  return err;
-};
+const { compileHandler, payloadValidator } = require('./builder');
+const { downloadHandler } = require('./download');
+const { HTTPError } = require('./utils');
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Allow': 'POST',
+  'Allow': 'GET,POST',
   'X-Backend-Server': (require('os').hostname())
 };
 
@@ -25,7 +21,7 @@ const preflight = function preflight (req, res, next) {
   // preflight POST request https://gist.github.com/balupton/3696140
   res.setHeader('Access-Control-Allow-Origin', 'https://blockly.sensebox.de');
   res.setHeader('Access-Control-Request-Method', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
   res.setHeader('Access-Control-Expose-Headers', 'x-backend-server, x-reponse-time');
   if ( req.method === 'OPTIONS' ) {
@@ -43,61 +39,21 @@ const preRequestValidator = function preRequestValidator (req, res, next) {
     res.setHeader(k, v);
   }
 
-  // reject everything not coming through /compile
-  if (req.url !== '/compile') {
+  // Parse URL to get query
+  const url = urlParser(req.url, true);
+  req._url = url;
+
+  // reject everything not coming through /compile or /download
+  if (url.pathname !== '/compile' && url.pathname !== '/download') {
     return next(new HTTPError({ code: 404, error: `Cannot serve ${req.url}` }));
   }
 
   // reject all non POST request
-  if (req.method !== 'POST') {
-    return next(new HTTPError({ code: 405, error: 'Invalid HTTP method. Only POST requests allowed.' }));
-  }
-
-  // reject all non application/json requests
-  if (!req.headers['content-type'] || !req.headers['content-type'].startsWith('application/json')) {
-    return next(new HTTPError({ code: 415, error: 'Invalid Content-Type. Only application/json Content-Type allowed.' }));
+  if (req.method !== 'POST' && req.method !== 'GET') {
+    return next(new HTTPError({ code: 405, error: 'Invalid HTTP method. Only GET or POST requests allowed.' }));
   }
 
   next();
-};
-
-const payloadValidator = function payloadValidator (req, res, next) {
-  // check if parameters sketch and board are specified and valid
-  let { sketch, board } = req.body;
-
-  if (!sketch || !board) {
-    return next(new HTTPError({ code: 422, error: 'Parameters \'sketch\' and \'board\' are required' }));
-  }
-
-  sketch = sketch.toString().trim();
-  board = board.toString().trim();
-
-  if (!sketch || !board) {
-    return next(new HTTPError({ code: 422, error: 'Parameters \'sketch\' and \'board\' are required' }));
-  }
-
-  if (!validBoards.includes(board)) {
-    return next(new HTTPError({ code: 422, error: `Invalid board parameter. Valid values are: ${validBoards.join(',')}` }));
-  }
-
-  req._builderParams = { sketch, board };
-  next();
-};
-
-// handle requests
-const handler = async function handler (req, res, next) {
-  // execute builder with parameters from user
-  try {
-    const stream = await execBuilder(req._builderParams);
-    stream.on('error', function (err) {
-      return next(err);
-    });
-
-    res.setHeader('Content-Type', 'application/octet-stream');
-    stream.pipe(res);
-  } catch (err) {
-    return next(new HTTPError({ error: err.message }));
-  }
 };
 
 const errorHandler = function errorHandler (err, req, res, next) {
@@ -117,9 +73,10 @@ const startServer = function startServer () {
   app.use(responseTime());
   app.use(preflight);
   app.use(preRequestValidator);
-  app.use(bodyParser.json());
-  app.use(payloadValidator);
-  app.use(handler);
+  app.use('/compile', bodyParser.json());
+  app.use('/compile', payloadValidator);
+  app.use('/compile', compileHandler);
+  app.use('/download', downloadHandler);
   app.use(errorHandler);
 
   http.createServer(app).listen(3000);
