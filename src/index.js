@@ -23,7 +23,7 @@ const preflight = function preflight (req, res, next) {
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
-  res.setHeader('Access-Control-Expose-Headers', 'x-backend-server, x-reponse-time');
+  res.setHeader('Access-Control-Expose-Headers', 'x-backend-server, x-response-time');
   if ( req.method === 'OPTIONS' ) {
     res.writeHead(204);
     res.end();
