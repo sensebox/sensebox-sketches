@@ -21,7 +21,7 @@ const downloadHandler = async function downloadHandler (req, res, next) {
       return next(err);
     });
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader('Content-Disposition', `attachment; filename=sketch.${boardBinaryFileextensions[req._url.query.board]}`);
     stream.pipe(res);
   } catch (err) {
