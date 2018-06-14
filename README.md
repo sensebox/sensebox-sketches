@@ -20,12 +20,9 @@ You can now compile sketches through the exposed HTTP interface. Here is an exam
 
 You can also run the container image mutliple times. See [Scaling with docker-compose](#scaling-with-docker-compose)
 
-### `POST /compile`
+### Endpoints
 
-Requests should always:
-
-- take the `/compile` route
-- be POST requests
+#### `POST /compile`
 - have `application/json` as `content-type`
 - contain a valid JSON string with keys `board` and `sketch` with non-empty values.
 
@@ -33,7 +30,33 @@ Possible `board` values are `sensebox-mcu` for the new senseBox MCU and `sensebo
 
 The `sketch` value should be a valid Arduino sketch.
 
-Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the response body.
+Responses have a `content-type: application/json` header and contains the following response body:
+```json
+{
+    "code":201,
+    "message":"Sketch successfully compiled and created!",
+    "data":{
+        "id":"77c1df527a874bd909b56bf1e3906604"
+    }
+}
+```
+
+The `id` is the identifier for your compiled sketch and must be used in the `GET /download/:id` route.
+
+#### `GET /download`
+Downloads a compiled sketch.
+
+Parameters:
+- `id` is the returned `id` from `/compile`
+- `board` specifies which compiled file should be downloaded. Posibile values `sensebox-mcu` or `sensebox`
+
+```
+https://compiler.sensebox.de/download?id={ID}&board={board}
+```
+
+Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the reponse body.
+
+It also have a `Content-Disposition: attachment; filename:sketch.bin|hex` header to force download.
 
 ## Scaling with docker-compose
 
@@ -51,8 +74,8 @@ Then reference the containers by its `compiler` alias and multiple requests will
 
 ### Compiling senseBox MCU Sketches Examples
 
-    arduino-builder -hardware /arduino-ide/hardware -hardware /root/.arduino15/packages -tools /arduino-ide/tools-builder -tools /root/.arduino15/packages -libraries /arduino-ide/libraries -fqbn=sensebox:samd:sb -build-cache /arduino-ide/build-cache -build-path /arduino-ide/builds /root/.arduino15/packages/sensebox/hardware/samd/1.0.4/libraries/senseBox/examples/Blink/Blink.ino
+    arduino-builder -hardware /arduino-ide/hardware -hardware /root/.arduino15/packages -tools /arduino-ide/tools-builder -tools /root/.arduino15/packages -libraries /arduino-ide/libraries -fqbn=sensebox:samd:sb:power=on -build-cache /arduino-ide/build-cache -build-path /arduino-ide/builds /root/.arduino15/packages/sensebox/hardware/samd/1.0.4/libraries/senseBox/examples/Blink/Blink.ino
 
 ### Compiling for Arduino Uno
 
-    arduino-builder -hardware /arduino-ide/hardware -hardware /root/.arduino15/packages -tools /arduino-ide/tools-builder -tools /root/.arduino15/packages -libraries /arduino-ide/libraries -fqbn=sensebox:samd:sb -build-cache /arduino-ide/build-cache -build-path /arduino-ide/builds /root/.arduino15/packages/sensebox/hardware/samd/1.0.4/libraries/senseBox/examples/Blink/Blink.ino
+    arduino-builder -hardware /arduino-ide/hardware -hardware /root/.arduino15/packages -tools /arduino-ide/tools-builder -tools /root/.arduino15/packages -libraries /arduino-ide/libraries -fqbn=arduino:avr:uno -build-cache /arduino-ide/build-cache -build-path /arduino-ide/builds /root/.arduino15/packages/sensebox/hardware/samd/1.0.4/libraries/senseBox/examples/Blink/Blink.ino
