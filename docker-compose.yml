@@ -7,9 +7,11 @@ services:
       - compiler-network
     volumes:
       - build-cache:/app/src/arduino-ide/build-cache
+      - sketch-cache:/tmp
 
 networks:
   compiler-network:
 
 volumes:
   build-cache:
+  sketch-cache:
