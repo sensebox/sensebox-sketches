@@ -18,6 +18,14 @@ You can now compile sketches through the exposed HTTP interface. Here is an exam
       --data '{"board":"sensebox-mcu", "sketch":"void setup() {\nSerial.begin(9600);\nSerial.println(\"Hello World\");\n}\nvoid loop() {}"}' \
       http://localhost:3000/compile
 
+And download the sketch using `curl`:
+
+    curl \
+      --request GET \
+      -O \
+      -J \
+      'http://localhost:3000/download?id={GENERATED_ID}&board={sensebox|sensebox-mcu}'
+
 You can also run the container image mutliple times. See [Scaling with docker-compose](#scaling-with-docker-compose)
 
 ### Endpoints
