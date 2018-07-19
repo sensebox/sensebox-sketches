@@ -3,8 +3,6 @@ const { boardBinaryFileextensions } = require('./builder');
 const { HTTPError } = require('./utils');
 
 const readFile = async function readFile ({ id, board }) {
-  console.log(id);
-  console.log(board);
   return Promise.resolve(fs.createReadStream(`/tmp/${id}/sketch.ino.${boardBinaryFileextensions[board]}`));
 }
 
