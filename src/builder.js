@@ -20,12 +20,12 @@ const arduinoIdePath = `${__dirname}/arduino-ide`;
 
 const baseArgs = [
   '-compile',
-  '-hardware',    `${arduinoIdePath}/hardware`,
-  '-hardware',    `${arduinoIdePath}/packages`,
-  '-tools',       `${arduinoIdePath}/tools-builder`,
-  '-tools',       `${arduinoIdePath}/tools`,
-  '-tools',       `${arduinoIdePath}/packages`,
-  '-libraries',   `${arduinoIdePath}/libraries`,
+  '-hardware', `${arduinoIdePath}/hardware`,
+  '-hardware', `${arduinoIdePath}/packages`,
+  '-tools', `${arduinoIdePath}/tools-builder`,
+  '-tools', `${arduinoIdePath}/tools`,
+  '-tools', `${arduinoIdePath}/packages`,
+  '-libraries', `${arduinoIdePath}/libraries`,
   '-build-cache', `${arduinoIdePath}/build-cache`
 ];
 

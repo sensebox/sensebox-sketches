@@ -24,7 +24,7 @@ const preflight = function preflight (req, res, next) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
   res.setHeader('Access-Control-Expose-Headers', 'x-backend-server, x-response-time');
-  if ( req.method === 'OPTIONS' ) {
+  if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
     return;
@@ -35,7 +35,7 @@ const preflight = function preflight (req, res, next) {
 
 const preRequestValidator = function preRequestValidator (req, res, next) {
   // set some headers, just in case
-  for (const [ k, v ] of Object.entries(defaultHeaders)) {
+  for (const [k, v] of Object.entries(defaultHeaders)) {
     res.setHeader(k, v);
   }
 
