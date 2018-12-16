@@ -16,13 +16,20 @@ const downloadHandler = async function downloadHandler (req, res, next) {
   // execute builder with parameters from user
   try {
     const stream = await readFile(req._url.query);
+    const filename = req._url.query.filename || 'sketch';
     stream.on('error', function (err) {
-      console.log('stream on error');
       return next(err);
+    });
+    stream.on('end', async () => {
+      try {
+        await rimraf_promise(`/tmp/${req._url.query.id}`)
+      } catch (error) {
+        console.log(`Error deleting compile sketch folder with ${req._url.query.id}: `, error);
+      }
     });
 
     res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Content-Disposition', `attachment; filename=sketch.${boardBinaryFileextensions[req._url.query.board]}`);
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}.${boardBinaryFileextensions[req._url.query.board]}`);
     stream.pipe(res);
   } catch (err) {
     return next(new HTTPError({ error: err.message }));
