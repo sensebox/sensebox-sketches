@@ -1,3 +1,7 @@
+const util = require('util');
+const rimraf = require('rimraf');
+const rimraf_promise = util.promisify(rimraf);
+
 const HTTPError = function HTTPError ({ code = 500, error = '' }) {
   const err = new Error(error);
   err.statusCode = code;
@@ -6,5 +10,6 @@ const HTTPError = function HTTPError ({ code = 500, error = '' }) {
 };
 
 module.exports = {
-  HTTPError
+  HTTPError,
+  rimraf_promise
 };

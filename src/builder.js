@@ -1,8 +1,8 @@
 const spawn = require('spawn-promise');
 const tempWrite = require('temp-write');
 const tempy = require('tempy');
-const fs = require('fs');
-const { HTTPError } = require('./utils');
+const path = require('path');
+const { HTTPError, rimraf_promise } = require('./utils');
 
 const boardFQBNs = {
   'sensebox-mcu': 'sensebox:samd:sb:power=on',
@@ -66,6 +66,13 @@ const execBuilder = async function execBuilder ({ board, sketch, buildDir }) {
     '-build-path', buildDir,
     tmpSketchPath
   ]);
+
+  try {
+    const dirname = path.dirname(tmpSketchPath);
+    await rimraf_promise(`${dirname}`);
+  } catch (error) {
+    console.log(`Error deleting tmp sketch folder ${tmpSketchPath}: `, error);
+  }
 };
 
 const compileHandler = async function compileHandler (req, res, next) {

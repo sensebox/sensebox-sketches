@@ -1,10 +1,8 @@
 const fs = require('fs');
 const { boardBinaryFileextensions } = require('./builder');
-const { HTTPError } = require('./utils');
+const { HTTPError, rimraf_promise } = require('./utils');
 
 const readFile = async function readFile ({ id, board }) {
-  console.log(id);
-  console.log(board);
   return Promise.resolve(fs.createReadStream(`/tmp/${id}/sketch.ino.${boardBinaryFileextensions[board]}`));
 }
 
