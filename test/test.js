@@ -23,7 +23,7 @@ describe('Compiler', () => {
     it('should post a sketch and compile it', (done) => {
       const sketch = {
         board: 'sensebox-mcu',
-        sketch: 'void setup() {\nSerial.begin(9600);\nSerial.println(\"Hello World\");\n}\nvoid loop() {}"}'
+        sketch: 'void setup() {\nSerial.begin(9600);\nSerial.println(\"Hello World\");\n}\nvoid loop() {}}'
       };
       chai.request(server)
         .post('/compile')

@@ -18,6 +18,5 @@ before_script:
   - arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION
   - arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION
   - mv $HOME/.arduino15/packages $TRAVIS_BUILD_DIR/src/arduino-ide/packages
-  - ls -LR $HOME
 script:
   - npm run test
