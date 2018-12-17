@@ -29,7 +29,7 @@ describe('Compiler', () => {
         .post('/compile')
         .send(sketch)
         .end((err, res) => {
-          res.should.have.status(201);
+          res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('message').eql('Sketch successfully compiled and created!');
           res.body.should.have.property('data');
