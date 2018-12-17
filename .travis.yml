@@ -13,6 +13,7 @@ before_script:
   - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
   - mv arduino-$IDE_VERSION $TRAVIS_BUILD_DIR/src/arduino-ide
+  - mkdir $TRAVIS_BUILD_DIR/src/arduino-ide/build-cache
   - export PATH=$PATH:$TRAVIS_BUILD_DIR/src/arduino-ide
   - arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION
   - arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION
