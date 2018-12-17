@@ -84,3 +84,5 @@ const startServer = function startServer () {
 };
 
 startServer();
+
+module.exports = app; // for testing
