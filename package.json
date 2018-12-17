@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "test": "mocha --exit"
+    "test": "mocha --exit --timeout 20000"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
