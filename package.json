@@ -5,7 +5,8 @@
   "author": "Gerald Pape <ubergesundheit@googlemail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "mocha --exit --timeout 20000"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -16,5 +17,10 @@
     "spawn-promise": "^0.1.8",
     "temp-write": "^3.4.0",
     "tempy": "^0.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }

@@ -11,6 +11,12 @@ const downloadHandler = async function downloadHandler (req, res, next) {
     return next(new HTTPError({ code: 405, error: 'Invalid HTTP method. Only GET requests allowed on /download.' }));
   }
 
+  const { id, board } = req._url.query;
+
+  if (!id || !board) {
+    return next(new HTTPError({ code: 422, error: 'Parameters \'id\' and \'board\' are required' }));
+  }
+
   // execute builder with parameters from user
   try {
     const stream = await readFile(req._url.query);

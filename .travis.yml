@@ -1,0 +1,27 @@
+sudo: false
+language: node_js
+node_js:
+- '10'
+env:
+  global:
+    - IDE_VERSION=1.8.5
+    - SENSEBOXCORE_VERSION=1.1.5
+    - ARDUINO_SAMD_VERSION=1.6.18
+    - ARDUINO_AVR_VERSION=1.6.21
+    - SENSEBOXCORE_URL=https://raw.githubusercontent.com/sensebox/senseBoxMCU-core/master/package_sensebox_index.json
+    - SENSEBOX_LIBRARY_URL=https://github.com/sensebox/senseBox_library/archive/master.zip \
+before_script:
+  - echo $TRAVIS_BUILD_DIR
+  - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
+  - tar xf arduino-$IDE_VERSION-linux64.tar.xz
+  - mv arduino-$IDE_VERSION $TRAVIS_BUILD_DIR/src/arduino-ide
+  - wget -O senseBox_Library.zip $SENSEBOX_LIBRARY_URL
+  - unzip senseBox_Library.zip -d $TRAVIS_BUILD_DIR/src/arduino-ide/libraries
+  - mkdir -p $TRAVIS_BUILD_DIR/src/arduino-ide/build-cache
+  - export PATH=$PATH:$TRAVIS_BUILD_DIR/src/arduino-ide
+  - arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION
+  - arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION
+  - arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION
+  - mv $HOME/.arduino15/packages $TRAVIS_BUILD_DIR/src/arduino-ide/packages
+script:
+  - npm run test
