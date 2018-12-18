@@ -57,14 +57,15 @@ Downloads a compiled sketch.
 Parameters:
 - `id` is the returned `id` from `/compile`
 - `board` specifies which compiled file should be downloaded. Posibile values `sensebox-mcu` or `sensebox`
+- `filename` name for the sketch. Default value is `sketch`
 
 ```
-https://compiler.sensebox.de/download?id={ID}&board={board}
+https://compiler.sensebox.de/download?id={ID}&board={board}&filename={filename}
 ```
 
-Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the reponse body.
+Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the response body.
 
-It also have a `Content-Disposition: attachment; filename:sketch.bin|hex` header to force download.
+It also have a `Content-Disposition: attachment; filename:{filename}.bin|hex` header to force download.
 
 ## Scaling with docker-compose
 

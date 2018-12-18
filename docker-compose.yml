@@ -3,10 +3,23 @@ version: "2"
 services:
   compiler:
     image: sensebox/sensebox-sketches
+    ports:
+      - 3000:3000
     networks:
       - compiler-network
     volumes:
       - build-cache:/app/src/arduino-ide/build-cache
+      - sketch-cache:/tmp
+
+  cleanup:
+    image: alpine:latest
+    command: |
+      /bin/sh -c "
+        set -e
+        IFS=$$'\n\t'
+        eval exec find /tmp/* -type d -maxdepth 0 -mmin +60 | xargs rm -rf
+      "
+    volumes:
       - sketch-cache:/tmp
 
 networks:
