@@ -1,4 +1,4 @@
-# A container based compiler for senseBox Blockly sketches
+# A container based compiler for senseBox Blockly sketches [![Build Status](https://travis-ci.org/sensebox/sensebox-sketches.svg?branch=master)](https://travis-ci.org/sensebox/sensebox-sketches)
 
 ## Usage
 
