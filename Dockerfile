@@ -8,6 +8,7 @@ ENV IDE_VERSION=1.8.5 \
   SENSEBOX_LIBRARY_URL=https://github.com/sensebox/senseBox_library/archive/master.zip \
   TELEGRAM_LIBRARY_URL=https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/archive/v1.1.0.zip \
   ARDUINO_JSON_LIBRARY_URL=https://github.com/bblanchon/ArduinoJson/releases/download/v5.13.5/ArduinoJson-v5.13.5.zip \
+  TTN_ARDUINO_LIBRARY_URL=https://github.com/TheThingsNetwork/arduino-device-lib/archive/v2.5.15.zip \
   PATH=$PATH:/arduino-ide
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget \
@@ -20,6 +21,8 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip telegram_Library.zip -d /arduino-ide/libraries \
   && wget -O arduino_json_Library.zip $ARDUINO_JSON_LIBRARY_URL \
   && unzip arduino_json_Library.zip -d /arduino-ide/libraries \
+  && wget -O ttn_arduino_Library.zip $TTN_ARDUINO_LIBRARY_URL \
+  && unzip ttn_arduino_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
   && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
   && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
