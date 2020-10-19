@@ -10,6 +10,7 @@ ENV IDE_VERSION=1.8.11 \
   ARDUINO_JSON_LIBRARY_URL=https://github.com/bblanchon/ArduinoJson/releases/download/v5.13.5/ArduinoJson-v5.13.5.zip \
   TTN_ARDUINO_LIBRARY_URL=https://github.com/TheThingsNetwork/arduino-device-lib/archive/v2.5.15.zip \
   BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
+  SCD_LIBRARY_URL=https://github.com/sparkfun/SparkFun_SCD30_Arduino_Library/archive/v1.0.8.zip \
   PATH=$PATH:/arduino-ide
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget \
@@ -26,6 +27,8 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip ttn_arduino_Library.zip -d /arduino-ide/libraries \
   && wget -O bsec_Library.zip $BSEC_LIBRARY_URL \
   && unzip bsec_Library.zip -d /arduino-ide/libraries \
+  && wget -O scd_Library.zip $SCD_LIBRARY_URL \
+  && unzip scd_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
   && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
   && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
