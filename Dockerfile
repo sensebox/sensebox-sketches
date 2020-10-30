@@ -1,7 +1,7 @@
 FROM debian:9.4-slim as builder
 
 ENV IDE_VERSION=1.8.11 \
-  SENSEBOXCORE_VERSION=1.3.2 \
+  SENSEBOXCORE_VERSION=1.3.3 \
   ARDUINO_SAMD_VERSION=1.8.4 \
   ARDUINO_AVR_VERSION=1.6.21 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/sensebox/senseBoxMCU-core/master/package_sensebox_index.json \
@@ -11,6 +11,7 @@ ENV IDE_VERSION=1.8.11 \
   TTN_ARDUINO_LIBRARY_URL=https://github.com/TheThingsNetwork/arduino-device-lib/archive/v2.5.15.zip \
   BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
   SCD_LIBRARY_URL=https://github.com/sparkfun/SparkFun_SCD30_Arduino_Library/archive/v1.0.8.zip \
+  GPS_LIBRARY_URL=https://github.com/sparkfun/SparkFun_Ublox_Arduino_Library/archive/v1.8.7.zip \
   PATH=$PATH:/arduino-ide
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget \
@@ -29,6 +30,8 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip bsec_Library.zip -d /arduino-ide/libraries \
   && wget -O scd_Library.zip $SCD_LIBRARY_URL \
   && unzip scd_Library.zip -d /arduino-ide/libraries \
+  && wget -O gps_Library.zip $GPS_LIBRARY_URL \
+  && unzip gps_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
   && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
   && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
