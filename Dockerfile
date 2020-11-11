@@ -12,6 +12,7 @@ ENV IDE_VERSION=1.8.11 \
   BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
   SCD_LIBRARY_URL=https://github.com/sparkfun/SparkFun_SCD30_Arduino_Library/archive/v1.0.8.zip \
   GPS_LIBRARY_URL=https://github.com/sparkfun/SparkFun_Ublox_Arduino_Library/archive/v1.8.7.zip \
+  MQTT_LIBRARY_URL=https://github.com/adafruit/Adafruit_MQTT_Library/archive/2.1.0.zip \
   PATH=$PATH:/arduino-ide
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget \
@@ -32,6 +33,8 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip scd_Library.zip -d /arduino-ide/libraries \
   && wget -O gps_Library.zip $GPS_LIBRARY_URL \
   && unzip gps_Library.zip -d /arduino-ide/libraries \
+  && wget -O mqtt_Library.zip $MQTT_LIBRARY_URL \
+  && unzip mqtt_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
   && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
   && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
