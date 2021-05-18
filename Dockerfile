@@ -14,6 +14,7 @@ ENV IDE_VERSION=1.8.13 \
   GPS_LIBRARY_URL=https://github.com/sparkfun/SparkFun_u-blox_GNSS_Arduino_Library/archive/v2.0.3.zip\
   MQTT_LIBRARY_URL=https://github.com/adafruit/Adafruit_MQTT_Library/archive/2.1.0.zip \
   NEWPING_LIBRARY_URL=https://bitbucket.org/teckel12/arduino-new-ping/downloads/NewPing_v1.9.1.zip \
+  PHYPHOX_LIBRARY_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/heads/master.zip \ 
   PATH=$PATH:/arduino-ide
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget \
@@ -36,6 +37,8 @@ RUN apt-get update && apt-get install -y xz-utils unzip wget \
   && unzip mqtt_Library.zip -d /arduino-ide/libraries \
   && wget -O newping_Library.zip $NEWPING_LIBRARY_URL \
   && unzip newping_Library.zip -d /arduino-ide/libraries \
+  && wget -O phyphox_Library.zip $PHYPHOX_LIBRARY_URL \
+  && unzip phyphox_Library.zip -d /arduino-ide/libraries \
   && arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards sensebox:samd:$SENSEBOXCORE_VERSION \
   && arduino --install-boards arduino:samd:$ARDUINO_SAMD_VERSION \
   && arduino --install-boards arduino:avr:$ARDUINO_AVR_VERSION \
