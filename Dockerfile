@@ -1,7 +1,7 @@
 FROM debian:9.4-slim as builder
 
 ENV IDE_VERSION=1.8.13 \
-  SENSEBOXCORE_VERSION=1.4.0 \
+  SENSEBOXCORE_VERSION=1.4.1 \
   ARDUINO_SAMD_VERSION=1.8.11 \
   ARDUINO_AVR_VERSION=1.8.3 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/sensebox/senseBoxMCU-core/master/package_sensebox_index.json \
@@ -10,7 +10,6 @@ ENV IDE_VERSION=1.8.13 \
   ARDUINO_JSON_LIBRARY_URL=https://github.com/bblanchon/ArduinoJson/releases/download/v5.13.5/ArduinoJson-v5.13.5.zip \
   TTN_ARDUINO_LIBRARY_URL=https://github.com/TheThingsNetwork/arduino-device-lib/archive/v2.5.15.zip \
   BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
-  #GPS_LIBRARY_URL=https://github.com/sparkfun/SparkFun_Ublox_Arduino_Library/archive/v1.8.7.zip \
   GPS_LIBRARY_URL=https://github.com/sparkfun/SparkFun_u-blox_GNSS_Arduino_Library/archive/v2.0.3.zip\
   MQTT_LIBRARY_URL=https://github.com/adafruit/Adafruit_MQTT_Library/archive/2.1.0.zip \
   NEWPING_LIBRARY_URL=https://bitbucket.org/teckel12/arduino-new-ping/downloads/NewPing_v1.9.1.zip \
