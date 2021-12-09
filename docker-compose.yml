@@ -2,13 +2,13 @@ version: "2"
 
 services:
   compiler:
-    image: sensebox/sensebox-sketches
+    context: .
     ports:
       - 3000:3000
     networks:
       - compiler-network
     volumes:
-      - build-cache:/app/src/arduino-ide/build-cache
+      # - build-cache:/app/src/arduino-ide/build-cache
       - sketch-cache:/tmp
 
   cleanup:
