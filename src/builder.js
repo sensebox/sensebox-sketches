@@ -16,9 +16,7 @@ const boardBinaryFileextensions = {
   sensebox: "hex",
 };
 
-const arduinoIdePath = `${__dirname}/arduino-ide`;
-
-const baseArgs = ["--build-cache-path", `${arduinoIdePath}/build-cache`];
+const baseArgs = ["--build-cache-path", `${__dirname}/build-cache`];
 
 const payloadValidator = function payloadValidator(req, res, next) {
   // reject all non application/json requests

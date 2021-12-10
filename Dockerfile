@@ -31,7 +31,6 @@ RUN arduino-cli core install arduino:avr
 
 RUN arduino-cli core install arduino:samd@${ARDUINO_SAMD_VERSION}
 
-
 RUN  wget -O senseBox_Library.zip $SENSEBOX_LIBRARY_URL \
   && arduino-cli lib install --zip-path senseBox_Library.zip \
   && wget -O telegram_Library.zip $TELEGRAM_LIBRARY_URL \
@@ -83,7 +82,6 @@ COPY yarn.lock /app
 RUN yarn install --pure-lockfile --production
 
 COPY src /app/src
-# COPY --from=builder /arduino-ide /app/src/arduino-ide
 
 # COPY platform.txt /app/src/arduino-ide/packages/arduino/hardware/samd/1.8.11
 
