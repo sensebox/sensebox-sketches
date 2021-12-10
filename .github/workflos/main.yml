@@ -25,6 +25,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Execute arduino-test
-        run: |
-          yarn test
+      - name: Build docker test container
+        run: docker build -t sketches-test -f Dockerfile.test --no-cache .
+
+      - name: Run docker test container
+        run: docker run sketches-test
