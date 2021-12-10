@@ -2,7 +2,7 @@ version: "2"
 
 services:
   compiler:
-    context: .
+    image: sensebox/sensebox-sketches
     ports:
       - 3000:3000
     networks:
