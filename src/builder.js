@@ -1,5 +1,4 @@
 const spawn = require("spawn-promise");
-const tempWrite = require("temp-write");
 const tempy = require("tempy");
 const path = require("path");
 const { HTTPError, rimraf_promise } = require("./utils");
@@ -19,23 +18,7 @@ const boardBinaryFileextensions = {
 
 const arduinoIdePath = `${__dirname}/arduino-ide`;
 
-const baseArgs = [
-  "-compile",
-  "-hardware",
-  `${arduinoIdePath}/hardware`,
-  "-hardware",
-  `${arduinoIdePath}/packages`,
-  "-tools",
-  `${arduinoIdePath}/tools-builder`,
-  "-tools",
-  `${arduinoIdePath}/tools`,
-  "-tools",
-  `${arduinoIdePath}/packages`,
-  "-libraries",
-  `${arduinoIdePath}/libraries`,
-  "-build-cache",
-  `${arduinoIdePath}/build-cache`,
-];
+const baseArgs = ["--build-cache-path", `${arduinoIdePath}/build-cache`];
 
 const payloadValidator = function payloadValidator(req, res, next) {
   // reject all non application/json requests
@@ -93,17 +76,15 @@ const payloadValidator = function payloadValidator(req, res, next) {
 
 const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
   // const tmpSketchPath = await tempWrite(sketch);
-  const sketchDir = tempy.directory();
-  const sketchName = sketchDir.split("/tmp/")[1];
-  const tmpSketchPath = `${sketchDir}/${sketchName}.ino`;
+  const sketchDir = `${tempy.directory()}/sketch`;
+  fs.mkdirSync(sketchDir);
+
+  const tmpSketchPath = `${sketchDir}/sketch.ino`;
   fs.writeFileSync(tmpSketchPath, sketch);
 
-  console.log(sketch);
-  console.log(
-    `arduino-cli compile --fqbn ${boardFQBNs[board]} --build-path ${buildDir} ${sketchDir}`
-  );
-  await spawn(`arduino-cli compile`, [
-    // ...baseArgs,
+  await spawn(`arduino-cli`, [
+    "compile",
+    ...baseArgs,
     "--fqbn",
     boardFQBNs[board],
     "--build-path",
