@@ -16,7 +16,7 @@ const boardBinaryFileextensions = {
   sensebox: "hex",
 };
 
-const baseArgs = ["--build-cache-path", `/app/src/build-cache/build-cache`];
+const baseArgs = ["--build-cache-path", `/app/src/build-cache`];
 
 const payloadValidator = function payloadValidator(req, res, next) {
   // reject all non application/json requests
