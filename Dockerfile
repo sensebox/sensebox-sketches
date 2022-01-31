@@ -9,8 +9,8 @@ ENV ARDUINO_CLI_VERSION=0.20.2 \
   BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
   PHYPHOX_LIBRARY_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/heads/master.zip \
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
-  SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip
-
+  SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
+  SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget
 
@@ -41,7 +41,9 @@ RUN  wget -O ttn_arduino_Library.zip $TTN_ARDUINO_LIBRARY_URL \
   && wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && arduino-cli lib install --zip-path ssd1306_plot_library.zip \
   && wget -O sensebox_libweb.zip $SENSEBOX_LIBWEB_URL \
-  && arduino-cli lib install --zip-path sensebox_libweb.zip 
+  && arduino-cli lib install --zip-path sensebox_libweb.zip \
+  && wget -O sds011-select-serial.zip $SDS011_LIBRARY_URL \
+  && arduino-cli lib install --zip-path sds011-select-serial.zip 
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "ArduinoJson"
@@ -57,6 +59,7 @@ RUN arduino-cli lib install "Adafruit BusIO"
 RUN arduino-cli lib install "Adafruit SleepyDog Library"
 RUN arduino-cli lib install "DallasTemperature"
 RUN arduino-cli lib install "ArduinoBearSSL"
+RUN arduino-cli lib install "ArduinoECCX08"
 RUN arduino-cli lib install "SparkFun SCD30 Arduino Library"
 RUN arduino-cli lib install "SparkFun u-blox GNSS Arduino Library"
 RUN arduino-cli lib install "NewPing"
