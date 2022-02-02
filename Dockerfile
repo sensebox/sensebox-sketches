@@ -10,7 +10,9 @@ ENV ARDUINO_CLI_VERSION=0.20.2 \
   PHYPHOX_LIBRARY_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/heads/master.zip \
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
-  SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip
+  SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
+  RTC_LIBRARY_URL=https://github.com/sensebox/RV8523-RTC-Arduino-Library/archive/refs/heads/main.zip \
+  BMX055_LIBRARY_URL=https://github.com/sensebox/BMX055-Arduino-Library/archive/refs/heads/main.zip 
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget
 
@@ -43,9 +45,14 @@ RUN  wget -O ttn_arduino_Library.zip $TTN_ARDUINO_LIBRARY_URL \
   && wget -O sensebox_libweb.zip $SENSEBOX_LIBWEB_URL \
   && arduino-cli lib install --zip-path sensebox_libweb.zip \
   && wget -O sds011-select-serial.zip $SDS011_LIBRARY_URL \
-  && arduino-cli lib install --zip-path sds011-select-serial.zip 
+  && arduino-cli lib install --zip-path sds011-select-serial.zip \
+  && wget -O rtc_library.zip $RTC_LIBRARY_URL \
+  && arduino-cli lib install --zip-path rtc_library.zip \
+  && wget -O bmx055_library.zip $BMX055_LIBRARY_URL \
+  && arduino-cli lib install --zip-path bmx055_library.zip  
 
 # install Libraries with arduino-cli
+RUN arduino-cli lib install "Ethernet"
 RUN arduino-cli lib install "ArduinoJson"
 RUN arduino-cli lib install "Adafruit HDC1000 Library"
 RUN arduino-cli lib install "Adafruit BME280 Library"
