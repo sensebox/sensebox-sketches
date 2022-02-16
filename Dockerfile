@@ -11,7 +11,7 @@ ENV ARDUINO_CLI_VERSION=0.20.2 \
   SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
   RTC_LIBRARY_URL=https://github.com/sensebox/RV8523-RTC-Arduino-Library/archive/refs/heads/main.zip \
   BMX055_LIBRARY_URL=https://github.com/sensebox/BMX055-Arduino-Library/archive/refs/heads/main.zip \
-  LTR329_LIBRARY_URL=https://github.com/dfw63/LTR329/archive/refs/heads/main.zip \
+  LTR329_LIBRARY_URL=https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library/archive/refs/heads/main.zip \
   SDS011S_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
   VEML6070_LIBRARY_URL=https://github.com/sensebox/VEML6070-UV-Arduino-Library/archive/refs/heads/main.zip 
 
