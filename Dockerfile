@@ -83,6 +83,7 @@ RUN arduino-cli lib install "JC_Button"
 RUN arduino-cli lib install "SD"
 RUN arduino-cli lib install "BSEC Software Library"
 RUN arduino-cli lib install "TheThingsNetwork"
+RUN arduino-cli lib install "NTPClient"
 
 
 
