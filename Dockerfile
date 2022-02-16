@@ -5,8 +5,6 @@ ENV ARDUINO_CLI_VERSION=0.20.2 \
   ARDUINO_SAMD_VERSION=1.8.12 \
   ARDUINO_AVR_VERSION=1.8.3 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
-  TTN_ARDUINO_LIBRARY_URL=https://github.com/TheThingsNetwork/arduino-device-lib/archive/v2.5.15.zip \
-  BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
   PHYPHOX_LIBRARY_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/heads/master.zip \
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
@@ -37,11 +35,7 @@ RUN arduino-cli core install arduino:samd@${ARDUINO_SAMD_VERSION}
 RUN curl -o /root/.arduino15/package_sensebox_index.json ${SENSEBOXCORE_URL}
 RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 
-RUN  wget -O ttn_arduino_Library.zip $TTN_ARDUINO_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ttn_arduino_Library.zip \
-  && wget -O bsec_Library.zip $BSEC_LIBRARY_URL \
-  && arduino-cli lib install --zip-path bsec_Library.zip \
-  && wget -O phyphox_Library.zip $PHYPHOX_LIBRARY_URL \
+RUN  wget -O phyphox_Library.zip $PHYPHOX_LIBRARY_URL \
   && arduino-cli lib install --zip-path phyphox_Library.zip \
   && wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && arduino-cli lib install --zip-path ssd1306_plot_library.zip \
@@ -66,6 +60,7 @@ RUN arduino-cli lib install "ArduinoJson"
 RUN arduino-cli lib install "Adafruit HDC1000 Library"
 RUN arduino-cli lib install "Adafruit BME280 Library"
 RUN arduino-cli lib install "Adafruit BMP280 Library"
+RUN arduino-cli lib install "Adafruit BME680 Library"
 RUN arduino-cli lib install "Adafruit DPS310"
 RUN arduino-cli lib install "Adafruit NeoPixel"
 RUN arduino-cli lib install "Adafruit SSD1306"
@@ -85,6 +80,9 @@ RUN arduino-cli lib install "CayenneLPP"
 RUN arduino-cli lib install "OneWire"
 RUN arduino-cli lib install "Nova Fitness Sds dust sensors library"
 RUN arduino-cli lib install "JC_Button"
+RUN arduino-cli lib install "SD"
+RUN arduino-cli lib install "BSEC Software Library"
+RUN arduino-cli lib install "TheThingsNetwork"
 
 
 
