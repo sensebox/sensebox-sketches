@@ -5,7 +5,6 @@ ENV ARDUINO_CLI_VERSION=0.20.2 \
   ARDUINO_SAMD_VERSION=1.8.12 \
   ARDUINO_AVR_VERSION=1.8.3 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
-  PHYPHOX_LIBRARY_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/heads/master.zip \
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
   SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
@@ -35,9 +34,7 @@ RUN arduino-cli core install arduino:samd@${ARDUINO_SAMD_VERSION}
 RUN curl -o /root/.arduino15/package_sensebox_index.json ${SENSEBOXCORE_URL}
 RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 
-RUN  wget -O phyphox_Library.zip $PHYPHOX_LIBRARY_URL \
-  && arduino-cli lib install --zip-path phyphox_Library.zip \
-  && wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
+RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && arduino-cli lib install --zip-path ssd1306_plot_library.zip \
   && wget -O sensebox_libweb.zip $SENSEBOX_LIBWEB_URL \
   && arduino-cli lib install --zip-path sensebox_libweb.zip \
@@ -84,6 +81,7 @@ RUN arduino-cli lib install "SD"
 RUN arduino-cli lib install "BSEC Software Library"
 RUN arduino-cli lib install "TheThingsNetwork"
 RUN arduino-cli lib install "NTPClient"
+RUN arduino-cli lib install "phyphox BLE"
 
 
 
