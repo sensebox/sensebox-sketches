@@ -82,6 +82,7 @@ RUN arduino-cli lib install "BSEC Software Library"
 RUN arduino-cli lib install "TheThingsNetwork"
 RUN arduino-cli lib install "NTPClient"
 RUN arduino-cli lib install "phyphox BLE"
+RUN arduino-cli lib install "UniversalTelegramBot"
 
 
 
