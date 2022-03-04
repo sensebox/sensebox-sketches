@@ -1,9 +1,9 @@
 FROM node:16
 
-ENV ARDUINO_CLI_VERSION=0.20.2 \
+ENV ARDUINO_CLI_VERSION=0.21.1 \
   SENSEBOXCORE_VERSION=2.0.0 \
-  ARDUINO_SAMD_VERSION=1.8.12 \
-  ARDUINO_AVR_VERSION=1.8.3 \
+  ARDUINO_SAMD_VERSION=1.8.13 \
+  ARDUINO_AVR_VERSION=1.8.5 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
@@ -82,6 +82,7 @@ RUN arduino-cli lib install "BSEC Software Library"
 RUN arduino-cli lib install "TheThingsNetwork"
 RUN arduino-cli lib install "NTPClient"
 RUN arduino-cli lib install "phyphox BLE"
+RUN arduino-cli lib install "UniversalTelegramBot"
 
 WORKDIR /app
 
