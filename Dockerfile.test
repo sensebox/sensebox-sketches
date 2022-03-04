@@ -84,19 +84,16 @@ RUN arduino-cli lib install "NTPClient"
 RUN arduino-cli lib install "phyphox BLE"
 RUN arduino-cli lib install "UniversalTelegramBot"
 
-
-
 WORKDIR /app
-
-ENV NODE_ENV=production
 
 COPY package.json /app
 COPY yarn.lock /app
 
-RUN yarn install --pure-lockfile --production
+RUN yarn 
 
 COPY src /app/src
+COPY test /app/test
 
 # COPY platform.txt /app/src/arduino-ide/packages/arduino/hardware/samd/1.8.11
 
-CMD ["yarn","start"]
+CMD ["yarn","test"]
