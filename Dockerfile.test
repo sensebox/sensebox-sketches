@@ -1,19 +1,18 @@
 FROM node:16
 
 ENV ARDUINO_CLI_VERSION=0.20.2 \
-  SENSEBOXCORE_VERSION=1.5.0-beta \
-  ARDUINO_SAMD_VERSION=1.8.11 \
+  SENSEBOXCORE_VERSION=2.0.0 \
+  ARDUINO_SAMD_VERSION=1.8.12 \
   ARDUINO_AVR_VERSION=1.8.3 \
-  SENSEBOXCORE_URL=https://raw.githubusercontent.com/sensebox/senseBoxMCU-core/master/package_sensebox_index.json \
-  SENSEBOX_LIBRARY_URL=https://github.com/sensebox/senseBox_library/archive/master.zip \
-  TELEGRAM_LIBRARY_URL=https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/archive/v1.1.0.zip \
-  ARDUINO_JSON_LIBRARY_URL=https://github.com/bblanchon/ArduinoJson/releases/download/v5.13.5/ArduinoJson-v5.13.5.zip \
-  TTN_ARDUINO_LIBRARY_URL=https://github.com/TheThingsNetwork/arduino-device-lib/archive/v2.5.15.zip \
-  BSEC_LIBRARY_URL=https://github.com/BoschSensortec/BSEC-Arduino-library/archive/v1.5.1474.zip \
-  GPS_LIBRARY_URL=https://github.com/sparkfun/SparkFun_u-blox_GNSS_Arduino_Library/archive/v2.0.3.zip\
-  MQTT_LIBRARY_URL=https://github.com/adafruit/Adafruit_MQTT_Library/archive/2.1.0.zip \
-  NEWPING_LIBRARY_URL=https://bitbucket.org/teckel12/arduino-new-ping/downloads/NewPing_v1.9.1.zip \
-  PHYPHOX_LIBRARY_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/heads/master.zip
+  SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
+  SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
+  SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
+  SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
+  RTC_LIBRARY_URL=https://github.com/sensebox/RV8523-RTC-Arduino-Library/archive/refs/heads/main.zip \
+  BMX055_LIBRARY_URL=https://github.com/sensebox/BMX055-Arduino-Library/archive/refs/heads/main.zip \
+  LTR329_LIBRARY_URL=https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library/archive/refs/heads/main.zip \
+  SDS011S_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
+  VEML6070_LIBRARY_URL=https://github.com/sensebox/VEML6070-UV-Arduino-Library/archive/refs/heads/main.zip 
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget
 
@@ -31,46 +30,58 @@ RUN arduino-cli core install arduino:avr
 
 RUN arduino-cli core install arduino:samd@${ARDUINO_SAMD_VERSION}
 
-RUN  wget -O senseBox_Library.zip $SENSEBOX_LIBRARY_URL \
-  && arduino-cli lib install --zip-path senseBox_Library.zip \
-  && wget -O telegram_Library.zip $TELEGRAM_LIBRARY_URL \
-  && arduino-cli lib install --zip-path telegram_Library.zip \
-  && wget -O arduino_json_Library.zip $ARDUINO_JSON_LIBRARY_URL \
-  && arduino-cli lib install --zip-path arduino_json_Library.zip \
-  && wget -O ttn_arduino_Library.zip $TTN_ARDUINO_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ttn_arduino_Library.zip \
-  && wget -O bsec_Library.zip $BSEC_LIBRARY_URL \
-  && arduino-cli lib install --zip-path bsec_Library.zip \
-  && wget -O gps_Library.zip $GPS_LIBRARY_URL \
-  && arduino-cli lib install --zip-path gps_Library.zip \
-  && wget -O mqtt_Library.zip $MQTT_LIBRARY_URL \
-  && arduino-cli lib install --zip-path mqtt_Library.zip \
-  && wget -O newping_Library.zip $NEWPING_LIBRARY_URL \
-  && arduino-cli lib install --zip-path newping_Library.zip \
-  && wget -O phyphox_Library.zip $PHYPHOX_LIBRARY_URL \
-  && arduino-cli lib install --zip-path phyphox_Library.zip
-
-# install arduino avr and libraries for senseBox V1
-RUN arduino-cli lib install Ethernet
-RUN arduino-cli lib install Ethernet2
-RUN arduino-cli lib install Wifi101
-
-RUN wget https://raw.githubusercontent.com/sensebox/home/master/libraries/BMP280.zip
-RUN wget https://raw.githubusercontent.com/sensebox/home/master/libraries/HDC100X.zip
-RUN wget https://raw.githubusercontent.com/sensebox/home/master/libraries/Makerblog_TSL45315.zip
-RUN wget https://raw.githubusercontent.com/sensebox/home/master/libraries/VEML6070.zip
-RUN wget https://raw.githubusercontent.com/sensebox/home/master/libraries/LTR329.zip
-
-RUN arduino-cli lib install --zip-path BMP280.zip
-RUN arduino-cli lib install --zip-path HDC100X.zip
-RUN arduino-cli lib install --zip-path Makerblog_TSL45315.zip
-RUN arduino-cli lib install --zip-path VEML6070.zip
-RUN arduino-cli lib install --zip-path LTR329.zip
-RUN arduino-cli lib install --git-url https://github.com/sensebox/SDS011-select-serial 
-
 # install arduino stuff for senseBox V2
-RUN curl -o /root/.arduino15/package_sensebox_index.json https://raw.githubusercontent.com/sensebox/senseBoxMCU-core/master/package_sensebox_index.json
-RUN arduino-cli --additional-urls https://raw.githubusercontent.com/sensebox/senseBoxMCU-core/master/package_sensebox_index.json core install sensebox:samd
+RUN curl -o /root/.arduino15/package_sensebox_index.json ${SENSEBOXCORE_URL}
+RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
+
+RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
+  && arduino-cli lib install --zip-path ssd1306_plot_library.zip \
+  && wget -O sensebox_libweb.zip $SENSEBOX_LIBWEB_URL \
+  && arduino-cli lib install --zip-path sensebox_libweb.zip \
+  && wget -O sds011-select-serial.zip $SDS011_LIBRARY_URL \
+  && arduino-cli lib install --zip-path sds011-select-serial.zip \
+  && wget -O rtc_library.zip $RTC_LIBRARY_URL \
+  && arduino-cli lib install --zip-path rtc_library.zip \
+  && wget -O bmx055_library.zip $BMX055_LIBRARY_URL \
+  && arduino-cli lib install --zip-path bmx055_library.zip  \
+  && wget -O ltr329_library.zip $LTR329_LIBRARY_URL \
+  && arduino-cli lib install --zip-path ltr329_library.zip  \
+  && wget -O sds011_select_library.zip $SDS011S_LIBRARY_URL \
+  && arduino-cli lib install --zip-path sds011_select_library.zip \
+  && wget -O veml6070_library.zip $VEML6070_LIBRARY_URL \
+  && arduino-cli lib install --zip-path veml6070_library.zip  
+
+# install Libraries with arduino-cli
+RUN arduino-cli lib install "Ethernet"
+RUN arduino-cli lib install "ArduinoJson"
+RUN arduino-cli lib install "Adafruit HDC1000 Library"
+RUN arduino-cli lib install "Adafruit BME280 Library"
+RUN arduino-cli lib install "Adafruit BMP280 Library"
+RUN arduino-cli lib install "Adafruit BME680 Library"
+RUN arduino-cli lib install "Adafruit DPS310"
+RUN arduino-cli lib install "Adafruit NeoPixel"
+RUN arduino-cli lib install "Adafruit SSD1306"
+RUN arduino-cli lib install "Adafruit GFX Library"
+RUN arduino-cli lib install "Adafruit MQTT Library"
+RUN arduino-cli lib install "Adafruit BusIO"
+RUN arduino-cli lib install "Adafruit SleepyDog Library"
+RUN arduino-cli lib install "DallasTemperature"
+RUN arduino-cli lib install "ArduinoBearSSL"
+RUN arduino-cli lib install "ArduinoECCX08"
+RUN arduino-cli lib install "SparkFun SCD30 Arduino Library"
+RUN arduino-cli lib install "SparkFun u-blox GNSS Arduino Library"
+RUN arduino-cli lib install "NewPing"
+RUN arduino-cli lib install "IBM LMIC framework"
+RUN arduino-cli lib install "LoRa Serialization"
+RUN arduino-cli lib install "CayenneLPP"
+RUN arduino-cli lib install "OneWire"
+RUN arduino-cli lib install "Nova Fitness Sds dust sensors library"
+RUN arduino-cli lib install "JC_Button"
+RUN arduino-cli lib install "SD"
+RUN arduino-cli lib install "BSEC Software Library"
+RUN arduino-cli lib install "TheThingsNetwork"
+RUN arduino-cli lib install "NTPClient"
+RUN arduino-cli lib install "phyphox BLE"
 
 WORKDIR /app
 
