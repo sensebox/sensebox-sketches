@@ -1,5 +1,7 @@
 # https://docs.github.com/en/actions/reference/events-that-trigger-workflows#registry_package
 # Run cleanup job if a new package was published or updated
+name: Purge untagged images
+
 on:
   registry_package:
 
