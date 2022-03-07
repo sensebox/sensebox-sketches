@@ -3,6 +3,9 @@ name: Build and publish to Github Container Registry
 on:
   workflow_run:
     workflows: [Tests]
+    branches: [master]
+    pull_request:
+      branches: [master]
     types:
       - completed
 
