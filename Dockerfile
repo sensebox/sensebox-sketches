@@ -86,6 +86,7 @@ RUN arduino-cli lib install "TheThingsNetwork"
 RUN arduino-cli lib install "NTPClient"
 RUN arduino-cli lib install "phyphox BLE"
 RUN arduino-cli lib install "UniversalTelegramBot"
+RUN arduino-cli lib install "Servo"
 
 
 
