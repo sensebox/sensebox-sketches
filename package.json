@@ -9,7 +9,7 @@
     "test": "mocha --exit --timeout 20000"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.1",
     "connect": "^3.6.6",
     "morgan": "^1.9.1",
     "response-time": "^2.3.2",
