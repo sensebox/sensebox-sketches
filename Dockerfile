@@ -1,10 +1,12 @@
 FROM node:17
 
-ENV ARDUINO_CLI_VERSION=0.29.0 \
+ENV ARDUINO_CLI_VERSION=0.33.1 \
   SENSEBOXCORE_VERSION=2.0.0 \
   ARDUINO_SAMD_VERSION=1.8.13 \
   ARDUINO_AVR_VERSION=1.8.5 \
+  ESP32_VERSION=2.0.9 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
+  ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json \ 
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
   SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
@@ -33,6 +35,13 @@ RUN arduino-cli core install arduino:samd@${ARDUINO_SAMD_VERSION}
 # install arduino stuff for senseBox V2
 RUN curl -o /root/.arduino15/package_sensebox_index.json ${SENSEBOXCORE_URL}
 RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
+
+# install ESP32
+RUN apt-get install -y python3-pip
+RUN pip install pyserial
+RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
+RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32
+
 
 RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && arduino-cli lib install --zip-path ssd1306_plot_library.zip \
