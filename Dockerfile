@@ -12,7 +12,8 @@ ENV ARDUINO_CLI_VERSION=0.29.0 \
   BMX055_LIBRARY_URL=https://github.com/sensebox/BMX055-Arduino-Library/archive/refs/heads/main.zip \
   LTR329_LIBRARY_URL=https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library/archive/refs/heads/main.zip \
   SDS011S_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
-  VEML6070_LIBRARY_URL=https://github.com/sensebox/VEML6070-UV-Arduino-Library/archive/refs/heads/main.zip 
+  VEML6070_LIBRARY_URL=https://github.com/sensebox/VEML6070-UV-Arduino-Library/archive/refs/heads/main.zip \
+  AMS5915_LIBRARY_URL=https://github.com/bolderflight/ams5915/archive/refs/heads/main.zip
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget
 
@@ -49,7 +50,9 @@ RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && wget -O sds011_select_library.zip $SDS011S_LIBRARY_URL \
   && arduino-cli lib install --zip-path sds011_select_library.zip \
   && wget -O veml6070_library.zip $VEML6070_LIBRARY_URL \
-  && arduino-cli lib install --zip-path veml6070_library.zip 
+  && arduino-cli lib install --zip-path veml6070_library.zip  \
+  && wget -O ams5915_library.zip $AMS5915_LIBRARY_URL \
+  && arduino-cli lib install --zip-path ams5915_library.zip
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"
@@ -87,6 +90,7 @@ RUN arduino-cli lib install "Servo"
 RUN arduino-cli lib install "RTCZero"
 RUN arduino-cli lib install "sensirion-sps"
 RUN arduino-cli lib install "TinyGPSPlus"
+RUN arduino-cli lib install "Bolder Flight Systems Unit Conversions"
 
 
 WORKDIR /app
