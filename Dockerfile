@@ -91,6 +91,7 @@ RUN arduino-cli lib install "RTCZero"
 RUN arduino-cli lib install "sensirion-sps"
 RUN arduino-cli lib install "TinyGPSPlus"
 RUN arduino-cli lib install "Bolder Flight Systems Unit Conversions"
+RUN arduino-cli lib install "HX711"
 
 
 WORKDIR /app
