@@ -7,7 +7,7 @@ const fs = require("fs");
 const boardFQBNs = {
   "sensebox-mcu": "sensebox:samd:sb:power=on",
   "sensebox": "arduino:avr:uno",
-  "sensebox-esp32s2": "esp32:esp32:esp32s2",
+  "sensebox-esp32s2": "esp32:esp32:sensebox_mcu_esp32s2",
 };
 
 const validBoards = Object.keys(boardFQBNs);
