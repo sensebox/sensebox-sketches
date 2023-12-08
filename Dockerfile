@@ -1,6 +1,6 @@
 FROM node:17
 
-ENV ARDUINO_CLI_VERSION=0.33.1 \
+ENV ARDUINO_CLI_VERSION=0.34.2 \
   SENSEBOXCORE_VERSION=2.0.0 \
   ARDUINO_SAMD_VERSION=1.8.13 \
   ARDUINO_AVR_VERSION=1.8.5 \
@@ -74,6 +74,7 @@ RUN arduino-cli lib install "Adafruit GFX Library"
 RUN arduino-cli lib install "Adafruit MQTT Library"
 RUN arduino-cli lib install "Adafruit BusIO"
 RUN arduino-cli lib install "Adafruit SleepyDog Library"
+RUN arduino-cli lib install "Adafruit MPU6050"
 RUN arduino-cli lib install "DallasTemperature"
 RUN arduino-cli lib install "ArduinoBearSSL"
 RUN arduino-cli lib install "ArduinoECCX08"
@@ -96,6 +97,7 @@ RUN arduino-cli lib install "Servo"
 RUN arduino-cli lib install "RTCZero"
 RUN arduino-cli lib install "sensirion-sps"
 RUN arduino-cli lib install "TinyGPSPlus"
+RUN arduino-cli lib install "SenseBoxBLE"
 
 
 WORKDIR /app
