@@ -14,6 +14,7 @@ const params = {
 
 let downloadId_mcu = '';
 let downloadId_uno = '';
+let downloadId_esp32s2 = '';
 
 describe('Compiler', () => {
   describe('/GET index', () => {
@@ -60,6 +61,26 @@ describe('Compiler', () => {
           res.body.data.should.be.a('object');
           res.body.data.should.have.property('id');
           downloadId_uno = res.body.data.id;
+          done();
+        })
+    });
+
+    it('should compile a sketch for senseBox MCU-S2 ESP32S2', (done) => {
+      const { sketch } = params;
+      chai.request(server)
+        .post('/compile')
+        .send({
+          board: 'sensebox-esp32s2',
+          sketch
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message').eql('Sketch successfully compiled and created!');
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('object');
+          res.body.data.should.have.property('id');
+          downloadId_esp32s2 = res.body.data.id;
           done();
         })
     });
@@ -165,6 +186,18 @@ describe('Compiler', () => {
           res.should.have.status(200);
           res.header.should.be.a('object');
           res.header.should.have.property('content-disposition').eql("attachment; filename=sketch.hex");
+          done();
+        });
+    });
+
+    it('should download sketch for senseBox MCU-S2 ESP32S2', (done) => {
+      chai.request(server)
+        .get('/download')
+        .query({ board: 'sensebox_esp32s2', id: downloadId_esp32s2 })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.header.should.be.a('object');
+          res.header.should.have.property('content-disposition').eql("attachment; filename=sketch.bin");
           done();
         });
     });
