@@ -193,7 +193,7 @@ describe('Compiler', () => {
     it('should download sketch for senseBox MCU-S2 ESP32S2', (done) => {
       chai.request(server)
         .get('/download')
-        .query({ board: 'sensebox_esp32s2', id: downloadId_esp32s2 })
+        .query({ board: 'sensebox-esp32s2', id: downloadId_esp32s2 })
         .end((err, res) => {
           res.should.have.status(200);
           res.header.should.be.a('object');
