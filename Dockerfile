@@ -1,6 +1,6 @@
 FROM node:17
 
-ENV ARDUINO_CLI_VERSION=0.34.2 \
+ENV ARDUINO_CLI_VERSION=0.35.3 \
   SENSEBOXCORE_VERSION=2.0.0 \
   ARDUINO_SAMD_VERSION=1.8.13 \
   ARDUINO_AVR_VERSION=1.8.5 \
@@ -15,7 +15,8 @@ ENV ARDUINO_CLI_VERSION=0.34.2 \
   LTR329_LIBRARY_URL=https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library/archive/refs/heads/main.zip \
   SDS011S_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
   VEML6070_LIBRARY_URL=https://github.com/sensebox/VEML6070-UV-Arduino-Library/archive/refs/heads/main.zip \
-  AMS5915_LIBRARY_URL=https://github.com/bolderflight/ams5915/archive/refs/heads/main.zip
+  AMS5915_LIBRARY_URL=https://github.com/bolderflight/ams5915/archive/refs/heads/main.zip \
+  PHYPHOX_BETA_URL=https://github.com/sensebox/phyphox-arduino/archive/refs/tags/v1.2.2-beta.zip 
 
 RUN apt-get update && apt-get install -y xz-utils unzip wget
 
@@ -61,7 +62,9 @@ RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && wget -O veml6070_library.zip $VEML6070_LIBRARY_URL \
   && arduino-cli lib install --zip-path veml6070_library.zip  \
   && wget -O ams5915_library.zip $AMS5915_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ams5915_library.zip
+  && arduino-cli lib install --zip-path ams5915_library.zip \
+  && wget -O phyphox_beta_library.zip $PHYPHOX_BETA_URL \
+  && arduino-cli lib install --zip-path phyphox_beta_library.zip
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"
@@ -94,7 +97,7 @@ RUN arduino-cli lib install "SD"
 RUN arduino-cli lib install "BSEC Software Library"
 RUN arduino-cli lib install "TheThingsNetwork"
 RUN arduino-cli lib install "NTPClient"
-RUN arduino-cli lib install "phyphox BLE"
+#RUN arduino-cli lib install "phyphox BLE" //remove until final release
 RUN arduino-cli lib install "UniversalTelegramBot"
 RUN arduino-cli lib install "Servo"
 RUN arduino-cli lib install "RTCZero"
