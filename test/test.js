@@ -1,220 +1,313 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = "test";
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../src/index');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const server = require("../src/index");
 const should = chai.should();
 
 chai.use(chaiHttp);
 
 const params = {
-  board: 'sensebox-mcu',
-  sketch: 'void setup() {\nSerial.begin(9600);\nSerial.println(\"Hello World\");\n}\nvoid loop() {}'
+  board: "sensebox-mcu",
+  sketch:
+    'void setup() {\nSerial.begin(9600);\nSerial.println("Hello World");\n}\nvoid loop() {}',
 };
 
-let downloadId_mcu = '';
-let downloadId_uno = '';
+let downloadId_mcu = "";
+let downloadId_uno = "";
+let downloadId_esp32s2 = "";
 
-describe('Compiler', () => {
-  describe('/GET index', () => {
-    it('it should get the index page and answer with a 404 ', (done) => {
-      chai.request(server)
-        .get('/')
+describe("Compiler", () => {
+  describe("/GET index", () => {
+    it("it should get the index page and answer with a 404 ", (done) => {
+      chai
+        .request(server)
+        .get("/")
         .end((err, res) => {
           res.should.have.status(404);
           done();
         });
     });
-  })
+  });
 
-  describe('/compile', () => {
-    it('should compile a sketch for senseBox MCU', (done) => {
-      chai.request(server)
-        .post('/compile')
+  describe("/compile", () => {
+    it("should compile a sketch for senseBox MCU", (done) => {
+      chai
+        .request(server)
+        .post("/compile")
         .send(params)
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql('Sketch successfully compiled and created!');
-          res.body.should.have.property('data');
-          res.body.data.should.be.a('object');
-          res.body.data.should.have.property('id');
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Sketch successfully compiled and created!");
+          res.body.should.have.property("data");
+          res.body.data.should.be.a("object");
+          res.body.data.should.have.property("id");
           downloadId_mcu = res.body.data.id;
           done();
-        })
+        });
     });
 
-    it('should compile a sketch for old senseBox', (done) => {
+    it("should compile a sketch for old senseBox", (done) => {
       const { sketch } = params;
-      chai.request(server)
-        .post('/compile')
+      chai
+        .request(server)
+        .post("/compile")
         .send({
-          board: 'sensebox',
-          sketch
+          board: "sensebox",
+          sketch,
         })
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql('Sketch successfully compiled and created!');
-          res.body.should.have.property('data');
-          res.body.data.should.be.a('object');
-          res.body.data.should.have.property('id');
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Sketch successfully compiled and created!");
+          res.body.should.have.property("data");
+          res.body.data.should.be.a("object");
+          res.body.data.should.have.property("id");
           downloadId_uno = res.body.data.id;
           done();
-        })
+        });
     });
 
-    it('should reject request without board parameter', (done) => {
+    it("should compile a sketch for senseBox MCU-S2 ESP32S2", (done) => {
       const { sketch } = params;
-      chai.request(server)
-        .post('/compile')
+      chai
+        .request(server)
+        .post("/compile")
+        .send({
+          board: "sensebox-esp32s2",
+          sketch,
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Sketch successfully compiled and created!");
+          res.body.should.have.property("data");
+          res.body.data.should.be.a("object");
+          res.body.data.should.have.property("id");
+          downloadId_esp32s2 = res.body.data.id;
+          done();
+        });
+    });
+
+    it("should reject request without board parameter", (done) => {
+      const { sketch } = params;
+      chai
+        .request(server)
+        .post("/compile")
         .send({ sketch })
         .end((err, res) => {
           res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Parameters 'sketch' and 'board' are required");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Parameters 'sketch' and 'board' are required");
           done();
         });
     });
 
-    it('should reject request without sketch parameter', (done) => {
+    it("should reject request without sketch parameter", (done) => {
       const { board } = params;
-      chai.request(server)
-        .post('/compile')
+      chai
+        .request(server)
+        .post("/compile")
         .send({ board })
         .end((err, res) => {
           res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Parameters 'sketch' and 'board' are required");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Parameters 'sketch' and 'board' are required");
           done();
         });
     });
 
-    it('should reject request with invalid board', (done) => {
+    it("should reject request with invalid board", (done) => {
       const { sketch } = params;
-      chai.request(server)
-        .post('/compile')
+      chai
+        .request(server)
+        .post("/compile")
         .send({
-          board: 'esp8266',
-          sketch
+          board: "esp8266",
+          sketch,
         })
         .end((err, res) => {
           res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Invalid board parameter. Valid values are: sensebox-mcu,sensebox");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql(
+              "Invalid board parameter. Valid values are: sensebox-mcu,sensebox,sensebox-esp32s2"
+            );
           done();
         });
     });
 
-    it('should reject request with wrong Content-Type', (done) => {
-      chai.request(server)
-        .post('/compile')
-        .set('Content-Type', 'text/plain')
-        .send('')
+    it("should reject request with wrong Content-Type", (done) => {
+      chai
+        .request(server)
+        .post("/compile")
+        .set("Content-Type", "text/plain")
+        .send("")
         .end((err, res) => {
           res.should.have.status(415);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Invalid Content-Type. Only application/json Content-Type allowed.");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql(
+              "Invalid Content-Type. Only application/json Content-Type allowed."
+            );
           done();
         });
     });
 
-    it('should only accept POST request', (done) => {
-      chai.request(server)
-        .get('/compile')
+    it("should only accept POST request", (done) => {
+      chai
+        .request(server)
+        .get("/compile")
         .send(params)
         .end((err, res) => {
           res.should.have.status(405);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Invalid HTTP method. Only POST requests allowed on /compile.");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql(
+              "Invalid HTTP method. Only POST requests allowed on /compile."
+            );
           done();
         });
     });
   });
 
-  describe('/download', () => {
-    it('should only accept /GET requests', (done) => {
-      chai.request(server)
-        .post('/download')
+  describe("/download", () => {
+    it("should only accept /GET requests", (done) => {
+      chai
+        .request(server)
+        .post("/download")
         .send({})
         .end((err, res) => {
           res.should.have.status(405);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Invalid HTTP method. Only GET requests allowed on /download.");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql(
+              "Invalid HTTP method. Only GET requests allowed on /download."
+            );
           done();
         });
     });
 
-    it('should download sketch for senseBox MCU', (done) => {
-      chai.request(server)
-        .get('/download')
-        .query({ board: 'sensebox-mcu', id: downloadId_mcu })
+    it("should download sketch for senseBox MCU", (done) => {
+      chai
+        .request(server)
+        .get("/download")
+        .query({ board: "sensebox-mcu", id: downloadId_mcu })
         .end((err, res) => {
           res.should.have.status(200);
-          res.header.should.be.a('object');
-          res.header.should.have.property('content-disposition').eql("attachment; filename=sketch.bin");
+          res.header.should.be.a("object");
+          res.header.should.have
+            .property("content-disposition")
+            .eql("attachment; filename=sketch.bin");
           done();
         });
     });
 
-    it('should download sketch for old senseBox', (done) => {
-      chai.request(server)
-        .get('/download')
-        .query({ board: 'sensebox', id: downloadId_uno })
+    it("should download sketch for old senseBox", (done) => {
+      chai
+        .request(server)
+        .get("/download")
+        .query({ board: "sensebox", id: downloadId_uno })
         .end((err, res) => {
           res.should.have.status(200);
-          res.header.should.be.a('object');
-          res.header.should.have.property('content-disposition').eql("attachment; filename=sketch.hex");
+          res.header.should.be.a("object");
+          res.header.should.have
+            .property("content-disposition")
+            .eql("attachment; filename=sketch.hex");
           done();
         });
     });
 
-    it('should reject request without id parameter', (done) => {
-      chai.request(server)
-        .get('/download')
+    it("should download sketch for senseBox MCU-S2 ESP32S2", (done) => {
+      chai
+        .request(server)
+        .get("/download")
+        .query({ board: "sensebox-esp32s2", id: downloadId_esp32s2 })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.header.should.be.a("object");
+          res.header.should.have
+            .property("content-disposition")
+            .eql("attachment; filename=sketch.bin");
+          done();
+        });
+    });
+
+    it("should reject request without id parameter", (done) => {
+      chai
+        .request(server)
+        .get("/download")
         .send({
-          board: 'sensebox-mcu'
+          board: "sensebox-mcu",
         })
         .end((err, res) => {
           res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Parameters 'id' and 'board' are required");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Parameters 'id' and 'board' are required");
           done();
         });
     });
 
-    it('should reject request without board parameter', (done) => {
-      chai.request(server)
-        .get('/download')
+    it("should reject request without board parameter", (done) => {
+      chai
+        .request(server)
+        .get("/download")
         .send({
-          id: downloadId_mcu
+          id: downloadId_mcu,
         })
         .end((err, res) => {
           res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql("Parameters 'id' and 'board' are required");
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Parameters 'id' and 'board' are required");
           done();
         });
     });
 
-    it('should set a custom filename', (done) => {
-      chai.request(server)
-        .post('/compile')
+    it("should set a custom filename", (done) => {
+      chai
+        .request(server)
+        .post("/compile")
         .send(params)
         .then((res) => {
           return res.body.data.id;
         })
         .then((downloadId) => {
-          chai.request(server)
-            .get('/download')
-            .query({ board: 'sensebox-mcu', id: downloadId, filename: 'custom' })
+          chai
+            .request(server)
+            .get("/download")
+            .query({
+              board: "sensebox-mcu",
+              id: downloadId,
+              filename: "custom",
+            })
             .end((err, res) => {
               res.should.have.status(200);
-              res.header.should.be.a('object');
-              res.header.should.have.property('content-disposition').eql("attachment; filename=custom.bin");
+              res.header.should.be.a("object");
+              res.header.should.have
+                .property("content-disposition")
+                .eql("attachment; filename=custom.bin");
               done();
             });
-        })
+        });
     });
   });
 });

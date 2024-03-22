@@ -34,7 +34,7 @@ You can also run the container image mutliple times. See [Scaling with docker-co
 - have `application/json` as `content-type`
 - contain a valid JSON string with keys `board` and `sketch` with non-empty values.
 
-Possible `board` values are `sensebox-mcu` for the new senseBox MCU and `sensebox` for the old Arduino Uno based senseBox.
+Possible `board` values are `sensebox-mcu` for the new senseBox MCU, `sensebox` for the old Arduino Uno based senseBox and `sensebox-esp32s2` for the esp32s2 based MCU.
 
 The `sketch` value should be a valid Arduino sketch.
 
