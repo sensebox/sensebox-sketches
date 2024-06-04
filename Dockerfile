@@ -4,9 +4,9 @@ ENV ARDUINO_CLI_VERSION=0.35.3 \
   SENSEBOXCORE_VERSION=2.0.0 \
   ARDUINO_SAMD_VERSION=1.8.13 \
   ARDUINO_AVR_VERSION=1.8.5 \
-  ESP32_VERSION=2.0.16 \
+  ESP32_VERSION=2.0.17 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
-  ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json \ 
+  ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json \
   SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
   SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
@@ -41,7 +41,7 @@ RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 RUN apt-get install -y python3-pip
 RUN pip install pyserial
 RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
-RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32
+RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ESP32_VERSION}
 
 
 RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
@@ -61,7 +61,7 @@ RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
   && wget -O veml6070_library.zip $VEML6070_LIBRARY_URL \
   && arduino-cli lib install --zip-path veml6070_library.zip  \
   && wget -O ams5915_library.zip $AMS5915_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ams5915_library.zip 
+  && arduino-cli lib install --zip-path ams5915_library.zip
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"
