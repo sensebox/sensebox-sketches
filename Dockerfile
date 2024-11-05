@@ -107,6 +107,7 @@ RUN arduino-cli lib install "STM32duino VL53L8CX"
 RUN arduino-cli lib install "Adafruit ICM20X"
 RUN arduino-cli lib install "NeoGPS"
 RUN arduino-cli lib install "Adafruit NeoMatrix"
+RUN arduino-cli lib install "Arduino Low Power"
 
 
 WORKDIR /app
