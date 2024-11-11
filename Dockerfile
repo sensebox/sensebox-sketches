@@ -7,7 +7,7 @@ ENV ARDUINO_CLI_VERSION=0.35.3 \
   ESP32_VERSION=2.0.17 \
   SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
   ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json \
-  SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.0.0.zip \
+  SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.1.0.zip \
   SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
   SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
   RTC_LIBRARY_URL=https://github.com/sensebox/RV8523-RTC-Arduino-Library/archive/refs/heads/main.zip \
@@ -107,6 +107,7 @@ RUN arduino-cli lib install "STM32duino VL53L8CX"
 RUN arduino-cli lib install "Adafruit ICM20X"
 RUN arduino-cli lib install "NeoGPS"
 RUN arduino-cli lib install "Adafruit NeoMatrix"
+RUN arduino-cli lib install "Arduino Low Power"
 
 
 WORKDIR /app
