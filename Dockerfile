@@ -108,6 +108,7 @@ RUN arduino-cli lib install "Adafruit ICM20X"
 RUN arduino-cli lib install "NeoGPS"
 RUN arduino-cli lib install "Adafruit NeoMatrix"
 RUN arduino-cli lib install "Arduino Low Power"
+RUN arduino-cli lib install "Adafruit seesaw Library"
 
 
 WORKDIR /app
