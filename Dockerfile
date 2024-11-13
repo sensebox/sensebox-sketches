@@ -103,7 +103,7 @@ RUN arduino-cli lib install "TinyGPSPlus"
 RUN arduino-cli lib install "SenseBoxBLE"
 RUN arduino-cli lib install "Bolder Flight Systems Unit Conversions"
 RUN arduino-cli lib install "HX711"
-RUN arduino-cli lib install "STM32duino VL53L8CX"
+RUN arduino-cli lib install "STM32duino VL53L8CX"@1.0.4
 RUN arduino-cli lib install "Adafruit ICM20X"
 RUN arduino-cli lib install "NeoGPS"
 RUN arduino-cli lib install "Adafruit NeoMatrix"
