@@ -69,7 +69,7 @@ const errorHandler = function errorHandler (err, req, res, next) {
 };
 
 const startServer = function startServer () {
-  app.use(morgan(':date[iso] :res[x-backend-server] :remote-addr :req[x-real-ip] :method :url :response-time[0] :status'));
+  app.use(morgan(':date[iso] :res[x-backend-server] :remote-addr :req[x-real-ip] :method :url :response-time[0] :status', { skip: (req, res) => process.env.NODE_ENV === 'test' }));
   app.use(responseTime());
   app.use(preflight);
   app.use(preRequestValidator);
