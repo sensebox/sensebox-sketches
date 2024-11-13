@@ -39,7 +39,7 @@ RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 
 # install ESP32
 RUN apt-get install -y python3-pip
-RUN pip install pyserial
+RUN pip install pyserial --break-system-packages
 RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
 RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ESP32_VERSION}
 
