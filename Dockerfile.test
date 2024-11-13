@@ -119,6 +119,7 @@ COPY yarn.lock /app
 RUN yarn
 COPY src /app/src
 COPY test /app/test
+COPY mocha-reporters.json /app
 
 # COPY platform.txt /app/src/arduino-ide/packages/arduino/hardware/samd/1.8.11
 

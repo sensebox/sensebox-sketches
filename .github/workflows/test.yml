@@ -29,4 +29,8 @@ jobs:
         run: docker build -t sketches-test -f Dockerfile.test --no-cache .
 
       - name: Run docker test container
-        run: docker run sketches-test
+        run: docker run -v ${{ github.workspace }}/ctrf:/app/ctrf sketches-test
+
+      - name: Run CTRF annotations
+        run: npx github-actions-ctrf ctrf/ctrf-report.json
+        if: always()
