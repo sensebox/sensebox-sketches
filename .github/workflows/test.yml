@@ -4,9 +4,7 @@ name: Tests
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [main]
+  # Triggers the workflow on pull request events but only for the main branch
   pull_request:
     branches: [main]
 
@@ -32,5 +30,7 @@ jobs:
         run: docker run -v ${{ github.workspace }}/ctrf:/app/ctrf sketches-test
 
       - name: Run CTRF annotations
-        run: npx github-actions-ctrf ctrf/ctrf-report.json
+        run: npx github-actions-ctrf pull-request ctrf/ctrf-report.json
         if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
