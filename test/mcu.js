@@ -40,6 +40,21 @@ describe("Compiler - MCU", () => {
       });
   });
 
+  it("should compile a senseBox:home sketch (from openSenseMap) for senseBox MCU", (done) => {
+    const sketch = fs.readFileSync("test/sketches/mcu/full-home.ino", "utf8");
+
+    chai
+      .request(server)
+      .post("/compile")
+      .send({ board: "sensebox-mcu", sketch })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.data.should.have.property("id");
+        downloadId_mcu = res.body.data.id;
+        done();
+      });
+  });
+
   it("should download sketch for senseBox MCU", (done) => {
     chai
       .request(server)
