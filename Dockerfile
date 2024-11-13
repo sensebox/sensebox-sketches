@@ -121,6 +121,7 @@ COPY yarn.lock /app
 RUN yarn install --pure-lockfile --production
 
 COPY src /app/src
+COPY splash.h ../root/Arduino/libraries/Adafruit_SSD1306/splash.h
 
 # COPY platform.txt /app/src/arduino-ide/packages/arduino/hardware/samd/1.8.11
 
