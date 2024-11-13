@@ -4,6 +4,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../src/index");
 const should = chai.should();
+const fs = require('fs');
 
 chai.use(chaiHttp);
 
@@ -81,6 +82,30 @@ describe("Compiler", () => {
         .send({
           board: "sensebox-esp32s2",
           sketch,
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Sketch successfully compiled and created!");
+          res.body.should.have.property("data");
+          res.body.data.should.be.a("object");
+          res.body.data.should.have.property("id");
+          downloadId_esp32s2 = res.body.data.id;
+          done();
+        });
+    });
+
+    it("should compile  the tof-distance-display sketch for senseBox MCU-S2 ESP32S2", (done) => {
+      const tof_distance_display_sketch = fs.readFileSync('test/sketches/tof-distance-display.ino', 'utf8');
+
+      chai
+        .request(server)
+        .post("/compile")
+        .send({
+          board: "sensebox-esp32s2",
+          sketch: tof_distance_display_sketch,
         })
         .end((err, res) => {
           res.should.have.status(200);
