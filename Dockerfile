@@ -1,29 +1,25 @@
-FROM node:22 AS base
+FROM node:22-alpine AS base
 
-ENV ARDUINO_CLI_VERSION=1.1.0 \
-  SENSEBOXCORE_VERSION=2.0.0 \
-  ARDUINO_SAMD_VERSION=1.8.13 \
-  ARDUINO_AVR_VERSION=1.8.5 \
-  ESP32_VERSION=2.0.17 \
-  SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json \
-  ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json \
-  SSD1306_PLOT_LIBRARY_URL=https://github.com/sensebox/SSD1306-Plot-Library/archive/refs/tags/v1.1.0.zip \
-  SENSEBOX_LIBWEB_URL=https://github.com/sensebox/sensebox-libweb/archive/refs/heads/master.zip \
-  SDS011_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
-  RTC_LIBRARY_URL=https://github.com/sensebox/RV8523-RTC-Arduino-Library/archive/refs/heads/main.zip \
-  BMX055_LIBRARY_URL=https://github.com/sensebox/BMX055-Arduino-Library/archive/refs/heads/main.zip \
-  LTR329_LIBRARY_URL=https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library/archive/refs/heads/main.zip \
-  SDS011S_LIBRARY_URL=https://github.com/sensebox/SDS011-select-serial/archive/refs/heads/master.zip \
-  VEML6070_LIBRARY_URL=https://github.com/sensebox/VEML6070-UV-Arduino-Library/archive/refs/heads/main.zip \
-  AMS5915_LIBRARY_URL=https://github.com/bolderflight/ams5915/archive/refs/heads/main.zip
+ENV ARDUINO_CLI_VERSION=1.1.0
+ENV SENSEBOXCORE_VERSION=2.0.0
+ENV ARDUINO_SAMD_VERSION=1.8.13
+ENV ARDUINO_AVR_VERSION=1.8.5
+ENV ESP32_VERSION=2.0.17
+ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
+ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
-RUN apt-get update && apt-get install -y xz-utils unzip wget
+RUN apk update
+RUN apk add curl
+RUN apk add libc6-compat
+RUN apk add bash
+RUN apk add python3
+RUN apk add py3-pyserial 
 
-RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh -s ${ARDUINO_CLI_VERSION}
+RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s ${ARDUINO_CLI_VERSION}
 
 RUN arduino-cli config init
 
-# aloow unsafe sources (zip, git)
+# allow unsafe sources (zip, git)
 RUN arduino-cli config set library.enable_unsafe_install true
 
 # update arduino-cli
@@ -38,30 +34,8 @@ RUN curl -o /root/.arduino15/package_sensebox_index.json ${SENSEBOXCORE_URL}
 RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 
 # install ESP32
-RUN apt-get install -y python3-pip
-RUN pip install pyserial --break-system-packages
 RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
 RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ESP32_VERSION}
-
-
-RUN  wget -O ssd1306_plot_library.zip $SSD1306_PLOT_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ssd1306_plot_library.zip \
-  && wget -O sensebox_libweb.zip $SENSEBOX_LIBWEB_URL \
-  && arduino-cli lib install --zip-path sensebox_libweb.zip \
-  && wget -O sds011-select-serial.zip $SDS011_LIBRARY_URL \
-  && arduino-cli lib install --zip-path sds011-select-serial.zip \
-  && wget -O rtc_library.zip $RTC_LIBRARY_URL \
-  && arduino-cli lib install --zip-path rtc_library.zip \
-  && wget -O bmx055_library.zip $BMX055_LIBRARY_URL \
-  && arduino-cli lib install --zip-path bmx055_library.zip  \
-  && wget -O ltr329_library.zip $LTR329_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ltr329_library.zip  \
-  && wget -O sds011_select_library.zip $SDS011S_LIBRARY_URL \
-  && arduino-cli lib install --zip-path sds011_select_library.zip \
-  && wget -O veml6070_library.zip $VEML6070_LIBRARY_URL \
-  && arduino-cli lib install --zip-path veml6070_library.zip  \
-  && wget -O ams5915_library.zip $AMS5915_LIBRARY_URL \
-  && arduino-cli lib install --zip-path ams5915_library.zip
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"
@@ -109,6 +83,14 @@ RUN arduino-cli lib install "NeoGPS"
 RUN arduino-cli lib install "Adafruit NeoMatrix"
 RUN arduino-cli lib install "Arduino Low Power"
 RUN arduino-cli lib install "Adafruit seesaw Library"
+RUN arduino-cli lib install --git-url https://github.com/sensebox/SSD1306-Plot-Library
+RUN arduino-cli lib install --git-url https://github.com/sensebox/sensebox-libweb
+RUN arduino-cli lib install --git-url https://github.com/sensebox/SDS011-select-serial
+RUN arduino-cli lib install --git-url https://github.com/sensebox/RV8523-RTC-Arduino-Library
+RUN arduino-cli lib install --git-url https://github.com/sensebox/BMX055-Arduino-Library
+RUN arduino-cli lib install --git-url https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library
+RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Arduino-Library
+RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
 
 WORKDIR /app
 
