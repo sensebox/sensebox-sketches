@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:22 AS base
 
 ENV ARDUINO_CLI_VERSION=1.1.0 \
   SENSEBOXCORE_VERSION=2.0.0 \
@@ -110,18 +110,23 @@ RUN arduino-cli lib install "Adafruit NeoMatrix"
 RUN arduino-cli lib install "Arduino Low Power"
 RUN arduino-cli lib install "Adafruit seesaw Library"
 
-
 WORKDIR /app
-
-ENV NODE_ENV=production
 
 COPY package.json /app
 COPY yarn.lock /app
 
+# production stage
+FROM base AS production
+ENV NODE_ENV=production
 RUN yarn install --pure-lockfile --production
-
 COPY src /app/src
-
-# COPY platform.txt /app/src/arduino-ide/packages/arduino/hardware/samd/1.8.11
-
 CMD ["yarn","start"]
+
+# test stage
+FROM base AS test
+ENV NODE_ENV=test
+RUN yarn install --pure-lockfile
+COPY src /app/src
+COPY test /app/test
+COPY mocha-reporters.json /app
+CMD ["yarn","test"]

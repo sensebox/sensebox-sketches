@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build docker test container
-        run: docker build -t sketches-test -f Dockerfile.test --no-cache .
+        run: docker build -t sketches-test --target test --no-cache .
 
       - name: Run docker test container
         run: docker run -v ${{ github.workspace }}/ctrf:/app/ctrf sketches-test
