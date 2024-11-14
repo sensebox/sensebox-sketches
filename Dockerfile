@@ -97,13 +97,6 @@ WORKDIR /app
 COPY package.json /app
 COPY yarn.lock /app
 
-# production stage
-FROM base AS production
-ENV NODE_ENV=production
-RUN yarn install --pure-lockfile --production
-COPY src /app/src
-CMD ["yarn","start"]
-
 # test stage
 FROM base AS test
 ENV NODE_ENV=test
@@ -112,3 +105,10 @@ COPY src /app/src
 COPY test /app/test
 COPY mocha-reporters.json /app
 CMD ["yarn","test"]
+
+# production stage
+FROM base AS production
+ENV NODE_ENV=production
+RUN yarn install --pure-lockfile --production
+COPY src /app/src
+CMD ["yarn","start"]
