@@ -35,12 +35,12 @@ jobs:
 
           LIBRARIES_FILE=$(cat libraries.txt)
 
-          # Append the generated text with a heading
-          NEW_BODY="${RELEASE_BODY}\n\n## Libraries\n\n\`\`\`\n${LIBRARIES_FILE}\n\`\`\`"
+          # Append the generated text with a heading and escape special characters
+          NEW_BODY=$(echo -e "${RELEASE_BODY}\n\n## Libraries\n\n\`\`\`\n${LIBRARIES_FILE}\n\`\`\`" | jq -Rs .)
 
           # Update the release body using GitHub API
           curl -X PATCH \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "${RELEASE_URL}" \
-            -d "{\"body\":\"${NEW_BODY}\"}"
+            -d "{\"body\":${NEW_BODY}}"
