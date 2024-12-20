@@ -73,6 +73,24 @@ Responses have a `content-type: application/octet-stream` header and contain the
 
 It also have a `Content-Disposition: attachment; filename:{filename}.bin|hex` header to force download.
 
+#### `GET /libraries`
+
+Shows a list of all installed Arduino libraries.
+
+```
+https://compiler.sensebox.de/libraries
+```
+
+Parameters:
+
+- `format` specifies the output format. Possible value: `json`
+
+```
+https://compiler.sensebox.de/libraries?format=json
+```
+
+Will return a list of all installed libraries in JSON format.
+
 ## Scaling with docker-compose
 
 Newer versions of docker allows to give the same alias to multiple containers in the same network. We exploit this to run multiple instances at the same time to balance load.
