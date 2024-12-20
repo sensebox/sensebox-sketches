@@ -20,8 +20,8 @@ describe("Compiler - UNO", () => {
         res.should.have.status(200);
         res.body.should.be.a("object");
         res.body.should.have
-        .property("message")
-        .eql("Sketch successfully compiled and created!");
+          .property("message")
+          .eql("Sketch successfully compiled and created!");
         res.body.should.have.property("data");
         res.body.data.should.be.a("object");
         res.body.data.should.have.property("id");
@@ -41,8 +41,8 @@ describe("Compiler - UNO", () => {
         res.should.have.status(200);
         res.body.should.be.a("object");
         res.body.should.have
-        .property("message")
-        .eql("Sketch successfully compiled and created!");
+          .property("message")
+          .eql("Sketch successfully compiled and created!");
         res.body.should.have.property("data");
         res.body.data.should.be.a("object");
         res.body.data.should.have.property("id");
@@ -58,7 +58,9 @@ describe("Compiler - UNO", () => {
       .query({ board: "sensebox", id: downloadId_uno })
       .end((err, res) => {
         res.should.have.status(200);
-        res.header.should.have.property("content-disposition").eql("attachment; filename=sketch.hex");
+        res.header.should.have
+          .property("content-disposition")
+          .eql("attachment; filename=sketch.hex");
         done();
       });
   });

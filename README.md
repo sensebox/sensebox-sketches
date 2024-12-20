@@ -1,4 +1,5 @@
-# A container based compiler for senseBox Blockly sketches 
+# A container based compiler for senseBox Blockly sketches
+
 ![Build Status](https://github.com/sensebox/sensebox-sketches/actions/workflows/registry-build-publish.yaml/badge.svg)
 
 ## Usage
@@ -32,6 +33,7 @@ You can also run the container image mutliple times. See [Scaling with docker-co
 ### Endpoints
 
 #### `POST /compile`
+
 - have `application/json` as `content-type`
 - contain a valid JSON string with keys `board` and `sketch` with non-empty values.
 
@@ -40,22 +42,25 @@ Possible `board` values are `sensebox-mcu` for the new senseBox MCU, `sensebox` 
 The `sketch` value should be a valid Arduino sketch.
 
 Responses have a `content-type: application/json` header and contains the following response body:
+
 ```json
 {
-    "code":201,
-    "message":"Sketch successfully compiled and created!",
-    "data":{
-        "id":"77c1df527a874bd909b56bf1e3906604"
-    }
+  "code": 201,
+  "message": "Sketch successfully compiled and created!",
+  "data": {
+    "id": "77c1df527a874bd909b56bf1e3906604"
+  }
 }
 ```
 
 The `id` is the identifier for your compiled sketch and must be used in the `GET /download/:id` route.
 
 #### `GET /download`
+
 Downloads a compiled sketch.
 
 Parameters:
+
 - `id` is the returned `id` from `/compile`
 - `board` specifies which compiled file should be downloaded. Posibile values `sensebox-mcu` or `sensebox`
 - `filename` name for the sketch. Default value is `sketch`

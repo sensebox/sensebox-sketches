@@ -23,7 +23,7 @@ describe("Compiler", () => {
       chai
         .request(server)
         .post("/compile")
-        .send({ sketch: 'void setup() {} void loop() {}' })
+        .send({ sketch: "void setup() {} void loop() {}" })
         .end((err, res) => {
           res.should.have.status(422);
           res.body.should.have
@@ -51,12 +51,17 @@ describe("Compiler", () => {
       chai
         .request(server)
         .post("/compile")
-        .send({ board: "esp8266", sketch: 'void setup() {} void loop() {}' })
+        .send({
+          board: "esp8266",
+          sketch: "void setup() {} void loop() {}",
+        })
         .end((err, res) => {
           res.should.have.status(422);
           res.body.should.have
             .property("message")
-            .eql("Invalid board parameter. Valid values are: sensebox-mcu,sensebox,sensebox-esp32s2");
+            .eql(
+              "Invalid board parameter. Valid values are: sensebox-mcu,sensebox,sensebox-esp32s2"
+            );
           done();
         });
     });
@@ -71,7 +76,9 @@ describe("Compiler", () => {
           res.should.have.status(415);
           res.body.should.have
             .property("message")
-            .eql("Invalid Content-Type. Only application/json Content-Type allowed.");
+            .eql(
+              "Invalid Content-Type. Only application/json Content-Type allowed."
+            );
           done();
         });
     });
@@ -80,12 +87,17 @@ describe("Compiler", () => {
       chai
         .request(server)
         .get("/compile")
-        .send({ board: "sensebox-mcu", sketch: 'void setup() {} void loop() {}' })
+        .send({
+          board: "sensebox-mcu",
+          sketch: "void setup() {} void loop() {}",
+        })
         .end((err, res) => {
           res.should.have.status(405);
           res.body.should.have
             .property("message")
-            .eql("Invalid HTTP method. Only POST requests allowed on /compile.");
+            .eql(
+              "Invalid HTTP method. Only POST requests allowed on /compile."
+            );
           done();
         });
     });

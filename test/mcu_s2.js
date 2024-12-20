@@ -40,7 +40,10 @@ describe("Compiler - MCU S2 (ESP32S2)", () => {
   });
 
   it("should compile the tof-distance-display sketch for senseBox MCU-S2 ESP32S2", (done) => {
-    const sketch = fs.readFileSync("test/sketches/mcu_s2/tof-distance-display.ino", "utf8");
+    const sketch = fs.readFileSync(
+      "test/sketches/mcu_s2/tof-distance-display.ino",
+      "utf8"
+    );
     chai
       .request(server)
       .post("/compile")
@@ -60,7 +63,9 @@ describe("Compiler - MCU S2 (ESP32S2)", () => {
       .query({ board: "sensebox-esp32s2", id: downloadId_esp32s2 })
       .end((err, res) => {
         res.should.have.status(200);
-        res.header.should.have.property("content-disposition").eql("attachment; filename=sketch.bin");
+        res.header.should.have
+          .property("content-disposition")
+          .eql("attachment; filename=sketch.bin");
         done();
       });
   });

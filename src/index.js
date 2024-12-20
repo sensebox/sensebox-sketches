@@ -11,6 +11,12 @@ import { downloadHandler } from "./download.js";
 import { HTTPError } from "./utils.js";
 
 const app = connect();
+const responseTime = require("response-time");
+const morgan = require("morgan");
+
+const { compileHandler, payloadValidator } = require("./builder");
+const { downloadHandler } = require("./download");
+const { HTTPError } = require("./utils");
 
 const defaultHeaders = {
   "Content-Type": "application/json",
@@ -49,7 +55,11 @@ const preRequestValidator = function preRequestValidator(req, res, next) {
   req._url = url;
 
   // reject everything not coming through /compile or /download
-  if (url.pathname !== "/compile" && url.pathname !== "/download") {
+  if (
+    url.pathname !== "/compile" &&
+    url.pathname !== "/download" &&
+    url.pathname !== "/libraries"
+  ) {
     return next(new HTTPError({ code: 404, error: `Cannot serve ${req.url}` }));
   }
 
@@ -94,6 +104,27 @@ const startServer = function startServer() {
   app.use("/compile", payloadValidator);
   app.use("/compile", compileHandler);
   app.use("/download", downloadHandler);
+  app.use("/libraries", function (req, res) {
+    // read request parameter format (json or text)
+    const format = req._url.query.format;
+
+    if (format === "json") {
+      const child = spawnSync("arduino-cli", [
+        "lib",
+        "list",
+        "--all",
+        "--format",
+        "json",
+      ]);
+      res.setHeader("Content-Type", "application/json");
+      res.end(child.stdout.toString());
+      return;
+    }
+
+    const child = spawnSync("arduino-cli", ["lib", "list", "--all"]);
+    res.setHeader("Content-Type", "text/plain");
+    res.end(child.stdout.toString());
+  });
   app.use(errorHandler);
 
   createServer(app).listen(3000);
