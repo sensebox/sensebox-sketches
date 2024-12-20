@@ -1,15 +1,11 @@
-const util = require('util');
-const rimraf = require('rimraf');
-const rimraf_promise = util.promisify(rimraf);
+import { rimraf } from "rimraf";
+import { promisify } from "util";
 
-const HTTPError = function HTTPError ({ code = 500, error = '' }) {
+export const rimraf_promise = promisify(rimraf);
+
+export function HTTPError({ code = 500, error = "" }) {
   const err = new Error(error);
   err.statusCode = code;
 
   return err;
-};
-
-module.exports = {
-  HTTPError,
-  rimraf_promise
-};
+}

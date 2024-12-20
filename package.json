@@ -2,6 +2,7 @@
   "name": "blockly-remote-compiler",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "author": "Gerald Pape <ubergesundheit@googlemail.com>",
   "license": "MIT",
   "scripts": {
@@ -9,18 +10,18 @@
     "test": "mocha --exit --timeout 60000 --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.3",
     "connect": "^3.6.6",
     "morgan": "^1.9.1",
-    "response-time": "^2.3.2",
-    "rimraf": "^3.0.2",
+    "response-time": "^2.3.3",
+    "rimraf": "^6.0.1",
     "spawn-promise": "^0.1.8",
-    "tempy": "^0.2.1"
+    "tempy": "^3.1.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-http": "^4.2.0",
-    "mocha": "^5.2.0",
+    "chai": "^5.1.2",
+    "chai-http": "^5.1.1",
+    "mocha": "^11.0.1",
     "mocha-ctrf-json-reporter": "^0.0.6",
     "mocha-multi-reporters": "^1.5.1"
   }
