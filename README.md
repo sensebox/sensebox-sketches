@@ -62,7 +62,7 @@ Downloads a compiled sketch.
 Parameters:
 
 - `id` is the returned `id` from `/compile`
-- `board` specifies which compiled file should be downloaded. Posibile values `sensebox-mcu` or `sensebox`
+- `board` specifies which compiled file should be downloaded. Possible values `sensebox-mcu` or `sensebox`
 - `filename` name for the sketch. Default value is `sketch`
 
 ```
@@ -72,6 +72,24 @@ https://compiler.sensebox.de/download?id={ID}&board={board}&filename={filename}
 Responses have a `content-type: application/octet-stream` header and contain the compiled sketch in the response body.
 
 It also have a `Content-Disposition: attachment; filename:{filename}.bin|hex` header to force download.
+
+#### `GET /libraries`
+
+Shows a list of all installed Arduino libraries.
+
+```
+https://compiler.sensebox.de/libraries
+```
+
+Parameters:
+
+- `format` specifies the output format. Possible value: `json`
+
+```
+https://compiler.sensebox.de/libraries?format=json
+```
+
+Will return a list of all installed libraries in JSON format.
 
 ## Scaling with docker-compose
 
@@ -84,13 +102,3 @@ Just start multiple instances using
     docker-compose up -d --scale compiler=4
 
 Then reference the containers by its `compiler` alias and multiple requests will be served by different containers.
-
-## In the container
-
-### Compiling senseBox MCU Sketches Examples
-
-    arduino-builder -hardware /arduino-ide/hardware -hardware /root/.arduino15/packages -tools /arduino-ide/tools-builder -tools /root/.arduino15/packages -libraries /arduino-ide/libraries -fqbn=sensebox:samd:sb:power=on -build-cache /arduino-ide/build-cache -build-path /arduino-ide/builds /root/.arduino15/packages/sensebox/hardware/samd/1.0.4/libraries/senseBox/examples/Blink/Blink.ino
-
-### Compiling for Arduino Uno
-
-    arduino-builder -hardware /arduino-ide/hardware -hardware /root/.arduino15/packages -tools /arduino-ide/tools-builder -tools /root/.arduino15/packages -libraries /arduino-ide/libraries -fqbn=arduino:avr:uno -build-cache /arduino-ide/build-cache -build-path /arduino-ide/builds /root/.arduino15/packages/sensebox/hardware/samd/1.0.4/libraries/senseBox/examples/Blink/Blink.ino
