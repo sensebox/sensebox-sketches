@@ -4,7 +4,6 @@ const server = require("../src/index");
 const should = chai.should();
 const fs = require("fs");
 
-
 chai.use(chaiHttp);
 
 describe("Compiler - MCU", () => {
@@ -62,7 +61,9 @@ describe("Compiler - MCU", () => {
       .query({ board: "sensebox-mcu", id: downloadId_mcu })
       .end((err, res) => {
         res.should.have.status(200);
-        res.header.should.have.property("content-disposition").eql("attachment; filename=sketch.bin");
+        res.header.should.have
+          .property("content-disposition")
+          .eql("attachment; filename=sketch.bin");
         done();
       });
   });
