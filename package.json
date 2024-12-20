@@ -9,7 +9,7 @@
     "test": "mocha --exit --timeout 60000 --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.3",
     "connect": "^3.6.6",
     "morgan": "^1.9.1",
     "response-time": "^2.3.2",
