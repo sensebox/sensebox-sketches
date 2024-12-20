@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "test": "mocha --exit --timeout 20000"
+    "test": "mocha --exit --timeout 60000 --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -20,6 +20,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "mocha-ctrf-json-reporter": "^0.0.6",
+    "mocha-multi-reporters": "^1.5.1"
   }
 }

@@ -1,0 +1,46 @@
+name: Update Release Body with Arduino Libraries
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-release-body:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Build docker container
+        run: docker build -t sketches --no-cache .
+
+      # Generate the libraries list
+      - name: Generate libraries list
+        id: generate_libraries_list
+        run: docker run sketches arduino-cli lib list --all > libraries.txt
+
+      # Update the release body
+      - name: Update Release Body
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch the release details
+          RELEASE_URL=$(jq -r '.release.url' "${GITHUB_EVENT_PATH}")
+          RELEASE_BODY=$(jq -r '.release.body' "${GITHUB_EVENT_PATH}")
+
+          LIBRARIES_FILE=$(cat libraries.txt)
+
+          # Append the generated text with a heading and escape special characters
+          NEW_BODY=$(echo -e "${RELEASE_BODY}\n\n## Libraries\n\n\`\`\`\n${LIBRARIES_FILE}\n\`\`\`" | jq -Rs .)
+
+          # Update the release body using GitHub API
+          curl -X PATCH \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "${RELEASE_URL}" \
+            -d "{\"body\":${NEW_BODY}}"
