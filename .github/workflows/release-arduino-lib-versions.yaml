@@ -1,4 +1,4 @@
-name: Update Release Body
+name: Update Release Body with Arduino Libraries
 
 on:
   release:
@@ -24,11 +24,6 @@ jobs:
         id: generate_libraries_list
         run: docker run sketches arduino-cli lib list --all > libraries.txt
 
-      # Read generated content into a variable
-      - name: Read generated content
-        id: read_content
-        run: echo "content=$(cat libraries.txt)" >> $GITHUB_OUTPUT
-
       # Update the release body
       - name: Update Release Body
         env:
@@ -38,8 +33,10 @@ jobs:
           RELEASE_URL=$(jq -r '.release.url' "${GITHUB_EVENT_PATH}")
           RELEASE_BODY=$(jq -r '.release.body' "${GITHUB_EVENT_PATH}")
 
+          LIBRARIES_FILE=$(cat libraries.txt)
+
           # Append the generated text with a heading
-          NEW_BODY="${RELEASE_BODY}\n\n## Libraries\n\n\`\`\`\n${{ steps.read_content.outputs.content }}\n\`\`\`"
+          NEW_BODY="${RELEASE_BODY}\n\n## Libraries\n\n\`\`\`\n${LIBRARIES_FILE}\n\`\`\`"
 
           # Update the release body using GitHub API
           curl -X PATCH \
