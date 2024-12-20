@@ -13,7 +13,7 @@ RUN apk add curl
 RUN apk add libc6-compat
 RUN apk add bash
 RUN apk add python3
-RUN apk add py3-pyserial 
+RUN apk add py3-pyserial
 
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s ${ARDUINO_CLI_VERSION}
 
@@ -111,4 +111,8 @@ FROM base AS production
 ENV NODE_ENV=production
 RUN yarn install --pure-lockfile --production
 COPY src /app/src
+COPY splash.h ../root/Arduino/libraries/Adafruit_SSD1306/splash.h
+
+# COPY platform.txt /app/src/arduino-ide/packages/arduino/hardware/samd/1.8.11
+
 CMD ["yarn","start"]
