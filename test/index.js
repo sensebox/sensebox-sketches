@@ -1,15 +1,10 @@
-const chai = require("chai");
-const chaiHttp = require("chai-http");
-const server = require("../src/index");
-const should = chai.should();
-
-chai.use(chaiHttp);
+import server from "../src/index.js";
+import request from "./setup.js";
 
 describe("Compiler", () => {
   describe("/GET index", () => {
     it("it should get the index page and answer with a 404 ", (done) => {
-      chai
-        .request(server)
+      request(server)
         .get("/")
         .end((err, res) => {
           res.should.have.status(404);
@@ -20,8 +15,7 @@ describe("Compiler", () => {
 
   describe("/compile", () => {
     it("should reject request without board parameter", (done) => {
-      chai
-        .request(server)
+      request(server)
         .post("/compile")
         .send({ sketch: "void setup() {} void loop() {}" })
         .end((err, res) => {
@@ -34,8 +28,7 @@ describe("Compiler", () => {
     });
 
     it("should reject request without sketch parameter", (done) => {
-      chai
-        .request(server)
+      request(server)
         .post("/compile")
         .send({ board: "sensebox-mcu" })
         .end((err, res) => {
@@ -48,8 +41,7 @@ describe("Compiler", () => {
     });
 
     it("should reject request with invalid board", (done) => {
-      chai
-        .request(server)
+      request(server)
         .post("/compile")
         .send({
           board: "esp8266",
@@ -67,8 +59,7 @@ describe("Compiler", () => {
     });
 
     it("should reject request with wrong Content-Type", (done) => {
-      chai
-        .request(server)
+      request(server)
         .post("/compile")
         .set("Content-Type", "text/plain")
         .send("")
@@ -84,8 +75,7 @@ describe("Compiler", () => {
     });
 
     it("should only accept POST request", (done) => {
-      chai
-        .request(server)
+      request(server)
         .get("/compile")
         .send({
           board: "sensebox-mcu",
