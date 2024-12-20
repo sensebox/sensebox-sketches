@@ -20,7 +20,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
-    "mocha": "^5.2.0",
+    "mocha": "^11.0.1",
     "mocha-ctrf-json-reporter": "^0.0.6",
     "mocha-multi-reporters": "^1.5.1"
   }
