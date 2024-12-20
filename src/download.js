@@ -1,16 +1,17 @@
-const fs = require("fs");
-const { boardBinaryFileextensions } = require("./builder");
-const { HTTPError, rimraf_promise } = require("./utils");
+import { createReadStream } from "fs";
+import { rimraf } from "rimraf";
+import { boardBinaryFileextensions } from "./builder.js";
+import { HTTPError } from "./utils.js";
 
 const readFile = async function readFile({ id, board }) {
   return Promise.resolve(
-    fs.createReadStream(
+    createReadStream(
       `/tmp/${id}/sketch.ino.${boardBinaryFileextensions[board]}`
     )
   );
 };
 
-const downloadHandler = async function downloadHandler(req, res, next) {
+export const downloadHandler = async function downloadHandler(req, res, next) {
   if (req.method !== "GET") {
     return next(
       new HTTPError({
@@ -40,7 +41,7 @@ const downloadHandler = async function downloadHandler(req, res, next) {
     });
     stream.on("end", async () => {
       try {
-        await rimraf_promise(`/tmp/${req._url.query.id}`);
+        await rimraf(`/tmp/${req._url.query.id}`);
       } catch (error) {
         console.log(
           `Error deleting compile sketch folder with ${req._url.query.id}: `,
@@ -52,14 +53,12 @@ const downloadHandler = async function downloadHandler(req, res, next) {
     res.setHeader("Content-Type", "application/octet-stream");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=${filename}.${boardBinaryFileextensions[req._url.query.board]}`
+      `attachment; filename=${filename}.${
+        boardBinaryFileextensions[req._url.query.board]
+      }`
     );
     stream.pipe(res);
   } catch (err) {
     return next(new HTTPError({ error: err.message }));
   }
-};
-
-module.exports = {
-  downloadHandler,
 };

@@ -1,26 +1,27 @@
-const spawn = require("spawn-promise");
-const tempy = require("tempy");
-const path = require("path");
-const { HTTPError, rimraf_promise } = require("./utils");
-const fs = require("fs");
+import { mkdirSync, writeFileSync } from "fs";
+import { dirname as _dirname } from "path";
+import { rimraf } from "rimraf";
+import spawn from "spawn-promise";
+import { temporaryDirectory } from "tempy";
+import { HTTPError } from "./utils.js";
 
 const boardFQBNs = {
   "sensebox-mcu": "sensebox:samd:sb:power=on",
-  "sensebox": "arduino:avr:uno",
+  sensebox: "arduino:avr:uno",
   "sensebox-esp32s2": "esp32:esp32:sensebox_mcu_esp32s2",
 };
 
 const validBoards = Object.keys(boardFQBNs);
 
-const boardBinaryFileextensions = {
+export const boardBinaryFileextensions = {
   "sensebox-mcu": "bin",
-  "sensebox": "hex",
+  sensebox: "hex",
   "sensebox-esp32s2": "bin",
 };
 
 const baseArgs = ["--build-cache-path", `/app/src/build-cache`];
 
-const payloadValidator = function payloadValidator(req, res, next) {
+export const payloadValidator = function payloadValidator(req, res, next) {
   // reject all non application/json requests
   if (
     !req.headers["content-type"] ||
@@ -76,11 +77,11 @@ const payloadValidator = function payloadValidator(req, res, next) {
 
 const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
   // const tmpSketchPath = await tempWrite(sketch);
-  const sketchDir = `${tempy.directory()}/sketch`;
-  fs.mkdirSync(sketchDir);
+  const sketchDir = `${temporaryDirectory()}/sketch`;
+  mkdirSync(sketchDir);
 
   const tmpSketchPath = `${sketchDir}/sketch.ino`;
-  fs.writeFileSync(tmpSketchPath, sketch);
+  writeFileSync(tmpSketchPath, sketch);
 
   await spawn(`arduino-cli`, [
     "compile",
@@ -93,14 +94,14 @@ const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
   ]);
 
   try {
-    const dirname = path.dirname(tmpSketchPath);
-    await rimraf_promise(`${dirname}`);
+    const dirname = _dirname(tmpSketchPath);
+    await rimraf(`${dirname}`);
   } catch (error) {
     console.log(`Error deleting tmp sketch folder ${tmpSketchPath}: `, error);
   }
 };
 
-const compileHandler = async function compileHandler(req, res, next) {
+export const compileHandler = async function compileHandler(req, res, next) {
   if (req.method !== "POST") {
     return next(
       new HTTPError({
@@ -110,7 +111,7 @@ const compileHandler = async function compileHandler(req, res, next) {
     );
   }
 
-  const buildDir = tempy.directory();
+  const buildDir = temporaryDirectory();
   req._builderParams = { buildDir, ...req._builderParams };
 
   // execute builder with parameters from user
@@ -130,10 +131,4 @@ const compileHandler = async function compileHandler(req, res, next) {
   } catch (err) {
     return next(new HTTPError({ error: err.message }));
   }
-};
-
-module.exports = {
-  payloadValidator,
-  compileHandler,
-  boardBinaryFileextensions,
 };

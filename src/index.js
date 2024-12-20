@@ -1,21 +1,23 @@
-const connect = require("connect");
-const http = require("http");
-const urlParser = require("url").parse;
-const bodyParser = require("body-parser");
-const app = connect();
-const responseTime = require("response-time");
-const morgan = require("morgan");
+import bodyParser from "body-parser";
+import { spawnSync } from "child_process";
+import connect from "connect";
+import { STATUS_CODES, createServer } from "http";
+import morgan from "morgan";
+import os from "os";
+import responseTime from "response-time";
+import { parse as urlParser } from "url";
 
-const { compileHandler, payloadValidator } = require("./builder");
-const { downloadHandler } = require("./download");
-const { HTTPError } = require("./utils");
-const { spawnSync } = require("child_process");
+import { compileHandler, payloadValidator } from "./builder.js";
+import { downloadHandler } from "./download.js";
+import { HTTPError } from "./utils.js";
+
+const app = connect();
 
 const defaultHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",
   Allow: "GET,POST",
-  "X-Backend-Server": require("os").hostname(),
+  "X-Backend-Server": os.hostname(),
 };
 
 const preflight = function preflight(req, res, next) {
@@ -77,10 +79,31 @@ const errorHandler = function errorHandler(err, req, res, next) {
   res.setHeader("Content-Type", "application/json");
   res.end(
     JSON.stringify({
-      code: http.STATUS_CODES[res.statusCode],
+      code: STATUS_CODES[res.statusCode],
       message: err.message,
     })
   );
+};
+
+const librariesHandler = function librariesHandler(req, res, next) {
+  const format = req._url.query.format;
+
+  if (format === "json") {
+    const child = spawnSync("arduino-cli", [
+      "lib",
+      "list",
+      "--all",
+      "--format",
+      "json",
+    ]);
+    res.setHeader("Content-Type", "application/json");
+    res.end(child.stdout.toString());
+    return;
+  }
+
+  const child = spawnSync("arduino-cli", ["lib", "list", "--all"]);
+  res.setHeader("Content-Type", "text/plain");
+  res.end(child.stdout.toString());
 };
 
 const startServer = function startServer() {
@@ -97,33 +120,13 @@ const startServer = function startServer() {
   app.use("/compile", payloadValidator);
   app.use("/compile", compileHandler);
   app.use("/download", downloadHandler);
-  app.use("/libraries", function (req, res) {
-    // read request parameter format (json or text)
-    const format = req._url.query.format;
-
-    if (format === "json") {
-      const child = spawnSync("arduino-cli", [
-        "lib",
-        "list",
-        "--all",
-        "--format",
-        "json",
-      ]);
-      res.setHeader("Content-Type", "application/json");
-      res.end(child.stdout.toString());
-      return;
-    }
-
-    const child = spawnSync("arduino-cli", ["lib", "list", "--all"]);
-    res.setHeader("Content-Type", "text/plain");
-    res.end(child.stdout.toString());
-  });
+  app.use("/libraries", librariesHandler);
   app.use(errorHandler);
 
-  http.createServer(app).listen(3000);
+  createServer(app).listen(3000);
   console.log("Compiler started and listening on port 3000!");
 };
 
 startServer();
 
-module.exports = app; // for testing
+export default app; // for testing

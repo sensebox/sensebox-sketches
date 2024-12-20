@@ -1,10 +1,6 @@
-const chai = require("chai");
-const chaiHttp = require("chai-http");
-const server = require("../src/index");
-const should = chai.should();
-const fs = require("fs");
-
-chai.use(chaiHttp);
+import fs from "fs";
+import server from "../src/index.js";
+import request from "./setup.js";
 
 describe("Compiler - UNO", () => {
   let downloadId_uno = "";
@@ -12,8 +8,7 @@ describe("Compiler - UNO", () => {
   it("should compile an empty sketch for old senseBox", (done) => {
     const sketch = fs.readFileSync("test/sketches/empty.ino", "utf8");
 
-    chai
-      .request(server)
+    request(server)
       .post("/compile")
       .send({ board: "sensebox", sketch })
       .end((err, res) => {
@@ -33,8 +28,7 @@ describe("Compiler - UNO", () => {
   it("should compile a hello world sketch for old senseBox", (done) => {
     const sketch = fs.readFileSync("test/sketches/hello-world.ino", "utf8");
 
-    chai
-      .request(server)
+    request(server)
       .post("/compile")
       .send({ board: "sensebox", sketch })
       .end((err, res) => {
@@ -52,8 +46,7 @@ describe("Compiler - UNO", () => {
   });
 
   it("should download sketch for old senseBox", (done) => {
-    chai
-      .request(server)
+    request(server)
       .get("/download")
       .query({ board: "sensebox", id: downloadId_uno })
       .end((err, res) => {
