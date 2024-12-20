@@ -1,8 +1,9 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { dirname as _dirname } from "path";
+import { rimraf } from "rimraf";
 import spawn from "spawn-promise";
 import { temporaryDirectory } from "tempy";
-import { HTTPError, rimraf_promise } from "./utils.js";
+import { HTTPError } from "./utils.js";
 
 const boardFQBNs = {
   "sensebox-mcu": "sensebox:samd:sb:power=on",
@@ -94,7 +95,7 @@ const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
 
   try {
     const dirname = _dirname(tmpSketchPath);
-    await rimraf_promise(`${dirname}`);
+    await rimraf(`${dirname}`);
   } catch (error) {
     console.log(`Error deleting tmp sketch folder ${tmpSketchPath}: `, error);
   }

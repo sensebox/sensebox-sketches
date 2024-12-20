@@ -1,6 +1,7 @@
 import { createReadStream } from "fs";
+import { rimraf } from "rimraf";
 import { boardBinaryFileextensions } from "./builder.js";
-import { HTTPError, rimraf_promise } from "./utils.js";
+import { HTTPError } from "./utils.js";
 
 const readFile = async function readFile({ id, board }) {
   return Promise.resolve(
@@ -40,7 +41,7 @@ export const downloadHandler = async function downloadHandler(req, res, next) {
     });
     stream.on("end", async () => {
       try {
-        await rimraf_promise(`/tmp/${req._url.query.id}`);
+        await rimraf(`/tmp/${req._url.query.id}`);
       } catch (error) {
         console.log(
           `Error deleting compile sketch folder with ${req._url.query.id}: `,
