@@ -83,6 +83,8 @@ RUN arduino-cli lib install "NeoGPS"
 RUN arduino-cli lib install "Adafruit NeoMatrix"
 RUN arduino-cli lib install "Arduino Low Power"
 RUN arduino-cli lib install "Adafruit seesaw Library"
+RUN arduino-cli lib install "ESP32Time"
+RUN arduino-cli lib install "Adafruit MAX1704X"
 RUN arduino-cli lib install --git-url https://github.com/sensebox/SSD1306-Plot-Library
 RUN arduino-cli lib install --git-url https://github.com/sensebox/sensebox-libweb
 RUN arduino-cli lib install --git-url https://github.com/sensebox/SDS011-select-serial
