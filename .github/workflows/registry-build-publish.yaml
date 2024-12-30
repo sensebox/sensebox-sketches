@@ -16,9 +16,6 @@ env:
 jobs:
   build-and-push-images:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        architecture: [amd64, arm64]
 
     permissions:
       contents: read
@@ -43,7 +40,10 @@ jobs:
           flavor: |
             latest=auto
             prefix=
-            suffix=${{ matrix.architecture }}
+            suffix=
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -54,6 +54,6 @@ jobs:
           context: .
           target: production
           push: true
-          platforms: linux/${{ matrix.architecture }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
