@@ -19,7 +19,7 @@
     "tempy": "^3.1.0"
   },
   "devDependencies": {
-    "chai": "^5.1.2",
+    "chai": "^5.2.0",
     "chai-http": "^5.1.1",
     "mocha": "^11.0.1",
     "mocha-ctrf-json-reporter": "^0.0.6",
