@@ -789,10 +789,10 @@ minimatch@^9.0.4:
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.1.2.tgz#93a9626ce5e5e66bd4db86849e7515e92340a707"
   integrity sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==
 
-mocha-ctrf-json-reporter@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/mocha-ctrf-json-reporter/-/mocha-ctrf-json-reporter-0.0.6.tgz#b27dfd01570a28f90f41d2cc12f8228142e6ec85"
-  integrity sha512-a5wBPTIYDfbSHKKYH6iM6Ut1PT2gpOoGe4tXB3SFYSou5QGUEcWHKBcHpnWGxVRUcYDMtNPU6n1127OHgS3qCA==
+mocha-ctrf-json-reporter@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/mocha-ctrf-json-reporter/-/mocha-ctrf-json-reporter-0.0.7.tgz#d8d95016ad086fdffe0da18f8c8271d2fd8c469e"
+  integrity sha512-p9HlfHki8n/+GL0EczM/Lk8kvRDfXOkI/a3rSkWwn/yeNQSSgm/H5AKjexsInxc/QvYXwZB2SyHkcXj1XC0fuw==
 
 mocha-multi-reporters@^1.5.1:
   version "1.5.1"
