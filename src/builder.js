@@ -129,6 +129,9 @@ export const compileHandler = async function compileHandler(req, res, next) {
       })
     );
   } catch (err) {
+    if (process.env.NODE_ENV === "test") {
+      console.error(err.message)
+    }
     return next(new HTTPError({ error: err.message }));
   }
 };
