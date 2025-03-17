@@ -49,6 +49,23 @@ describe("Compiler - MCU S2 (ESP32S2)", () => {
       });
   });
 
+  it("should compile the robo-eyes sketch for senseBox MCU-S2 ESP32S2", (done) => {
+    const sketch = fs.readFileSync(
+      "test/sketches/mcu_s2/robo-eyes.ino",
+      "utf8"
+    );
+    request(server)
+      .post("/compile")
+      .send({ board: "sensebox-esp32s2", sketch })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.data.should.have.property("id");
+        downloadId_esp32s2 = res.body.data.id;
+        done();
+      });
+  });
+
+
   it("should download sketch for senseBox MCU-S2 ESP32S2", (done) => {
     request(server)
       .get("/download")
