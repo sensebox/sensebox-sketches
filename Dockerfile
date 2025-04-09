@@ -40,11 +40,10 @@ RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ES
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
 # Use these lines to use environment variable in docker
-RUN mkdir -p /root/.arduino15/packages/esp32/hardware/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2 && \
-    cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/${ESP32_VERSION}/ && \
-    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
+RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/ && \
+    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
 
 
 # install Libraries with arduino-cli
