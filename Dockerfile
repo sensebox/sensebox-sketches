@@ -114,7 +114,7 @@ COPY mocha-reporters.json /app
 
 # copy the OTA files
 COPY ./OTAFiles/boards.txt ../root/.arduino15/packages/esp32/hardware/{ESP32_VERSION} 
-COPY ./OTAFiles/APOTA.ino ../root/.arduino15/packages/esp32/hardware/s{ESP32_VERSION}/variants/sensebox_mcu_esp32s2
+COPY ./OTAFiles/APOTA.ino ../root/.arduino15/packages/esp32/hardware/{ESP32_VERSION}/variants/sensebox_mcu_esp32s2
 COPY ./OTAFiles/APOTA.bin ../root/.arduino15/packages/esp32/hardware/{ESP32_VERSION}/variants/sensebox_mcu_esp32s2
 COPY ./OTAFiles/variant.cpp ../root/.arduino15/packages/esp32/hardware/{ESP32_VERSION}/variants/sensebox_mcu_esp32s2
 
