@@ -37,6 +37,15 @@ RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
 RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ESP32_VERSION}
 
+COPY ./OTAFiles/ /tmp/OTAFiles/
+
+# Use these lines to use environment variable in docker
+RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/ && \
+    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
+
+
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"
 RUN arduino-cli lib install "ArduinoJson"
@@ -111,6 +120,9 @@ RUN yarn install --pure-lockfile
 COPY src /app/src
 COPY test /app/test
 COPY mocha-reporters.json /app
+
+
+
 CMD ["yarn","test"]
 
 # production stage
