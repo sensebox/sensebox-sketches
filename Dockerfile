@@ -1,8 +1,8 @@
 FROM node:22-alpine AS base
 
-ENV ARDUINO_CLI_VERSION=1.1.0
+ENV ARDUINO_CLI_VERSION=1.2.0
 ENV SENSEBOXCORE_VERSION=2.0.0
-ENV ARDUINO_SAMD_VERSION=1.8.13
+ENV ARDUINO_SAMD_VERSION=1.8.12
 ENV ARDUINO_AVR_VERSION=1.8.5
 ENV ESP32_VERSION=2.0.17
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
@@ -45,6 +45,12 @@ RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/$
     cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
     cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
 
+COPY ./uf2/ /tmp/uf2/
+
+# Add uf2conv.py
+RUN cp /tmp/uf2/uf2conv.py /usr/local/bin/uf2conv.py && \
+    cp /tmp/uf2/uf2families.json /usr/local/bin/uf2families.json && \
+    cp /tmp/uf2/uf2conv.c /usr/local/bin/uf2conv.c
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"
