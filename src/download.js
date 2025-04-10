@@ -1,14 +1,26 @@
-import { createReadStream } from "fs";
+import { createReadStream, existsSync } from "fs";
+import { join } from "path";
 import { rimraf } from "rimraf";
 import { boardBinaryFileextensions } from "./builder.js";
 import { HTTPError } from "./utils.js";
 
-const readFile = async function readFile({ id, board }) {
-  return Promise.resolve(
-    createReadStream(
-      `/tmp/${id}/sketch.ino.${boardBinaryFileextensions[board]}`
-    )
+const readFile = async function readFile({ id, board, format }) {
+  const ext = format === "uf2" ? "uf2" : boardBinaryFileextensions[board];
+  const filePath = join(
+    "/tmp",
+    id,
+    `sketch.${format !== "uf2" ? "ino." : ""}${ext}`
   );
+  console.log(`Reading file: ${filePath}`);
+
+  if (!existsSync(filePath)) {
+    throw new HTTPError({
+      code: 404,
+      error: `Compiled file not found: sketch.${ext}`,
+    });
+  }
+
+  return Promise.resolve(createReadStream(filePath));
 };
 
 export const downloadHandler = async function downloadHandler(req, res, next) {
@@ -21,7 +33,7 @@ export const downloadHandler = async function downloadHandler(req, res, next) {
     );
   }
 
-  const { id, board } = req._url.query;
+  const { id, board, format } = req._url.query;
 
   if (!id || !board) {
     return next(
@@ -32,30 +44,27 @@ export const downloadHandler = async function downloadHandler(req, res, next) {
     );
   }
 
-  // execute builder with parameters from user
   try {
-    const stream = await readFile(req._url.query);
+    const ext = format === "uf2" ? "uf2" : boardBinaryFileextensions[board];
+    const stream = await readFile({ id, board, format });
     const filename = req._url.query.filename || "sketch";
+    console.log(`Downloading ${filename}.${ext} for board ${board}`);
     stream.on("error", function (err) {
       return next(err);
     });
+
     stream.on("end", async () => {
       try {
-        await rimraf(`/tmp/${req._url.query.id}`);
+        await rimraf(`/tmp/${id}`);
       } catch (error) {
-        console.log(
-          `Error deleting compile sketch folder with ${req._url.query.id}: `,
-          error
-        );
+        console.log(`Error deleting compile sketch folder with ${id}: `, error);
       }
     });
 
     res.setHeader("Content-Type", "application/octet-stream");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=${filename}.${
-        boardBinaryFileextensions[req._url.query.board]
-      }`
+      `attachment; filename=${filename}.${ext}`
     );
     stream.pipe(res);
   } catch (err) {

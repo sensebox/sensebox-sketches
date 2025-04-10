@@ -19,7 +19,7 @@ export const boardBinaryFileextensions = {
   "sensebox-esp32s2": "bin",
 };
 
-const baseArgs = ["--build-cache-path", `/app/src/build-cache`];
+const baseArgs = ["--build-path", `/app/src/build-cache`];
 
 export const payloadValidator = function payloadValidator(req, res, next) {
   // reject all non application/json requests
@@ -37,7 +37,7 @@ export const payloadValidator = function payloadValidator(req, res, next) {
   }
 
   // check if parameters sketch and board are specified and valid
-  let { sketch, board } = req.body;
+  let { sketch, board, uf2 } = req.body;
 
   if (!sketch || !board) {
     return next(
@@ -50,6 +50,7 @@ export const payloadValidator = function payloadValidator(req, res, next) {
 
   sketch = sketch.toString().trim();
   board = board.toString().trim();
+  uf2 = uf2 ? uf2.toString().trim() : false;
 
   if (!sketch || !board) {
     return next(
@@ -71,11 +72,16 @@ export const payloadValidator = function payloadValidator(req, res, next) {
     );
   }
 
-  req._builderParams = { sketch, board };
+  req._builderParams = { sketch, board, uf2 };
   next();
 };
 
-const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
+const execBuilder = async function execBuilder({
+  board,
+  sketch,
+  buildDir,
+  uf2,
+}) {
   // const tmpSketchPath = await tempWrite(sketch);
   const sketchDir = `${temporaryDirectory()}/sketch`;
   mkdirSync(sketchDir);
@@ -92,6 +98,31 @@ const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
     buildDir,
     sketchDir,
   ]);
+
+  const ext = boardBinaryFileextensions[board];
+  const binaryFile = `${buildDir}/sketch.ino.${ext}`;
+
+  // Optional: Convert to UF2 if requested
+  if (uf2 && ext === "bin") {
+    const uf2File = `${buildDir}/sketch.uf2`;
+    try {
+      await spawn("python3", [
+        "/usr/local/bin/uf2conv.py",
+        binaryFile,
+        "-c",
+        "-b",
+        "0x00",
+        "-f",
+        "ESP32S2",
+        "--output",
+        uf2File,
+      ]);
+      console.log(`UF2 file created: ${uf2File}`);
+    } catch (err) {
+      console.warn("UF2 conversion failed:", err.message);
+      // You may choose to throw here depending on how critical UF2 output is
+    }
+  }
 
   try {
     const dirname = _dirname(tmpSketchPath);
@@ -130,7 +161,7 @@ export const compileHandler = async function compileHandler(req, res, next) {
     );
   } catch (err) {
     if (process.env.NODE_ENV === "test") {
-      console.error(err.message)
+      console.error(err.message);
     }
     return next(new HTTPError({ error: err.message }));
   }
