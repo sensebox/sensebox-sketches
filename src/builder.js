@@ -85,7 +85,7 @@ const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
     "compile",
     "--fqbn",
     boardFQBNs[board],
-    "--build-path",
+    "--output-dir",
     buildDir,
     sketchDir,
   ]);
