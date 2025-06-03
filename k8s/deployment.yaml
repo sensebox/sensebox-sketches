@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sketch-compiler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sketch-compiler
+  template:
+    metadata:
+      labels:
+        app: sketch-compiler
+    spec:
+      containers:
+        - name: compiler
+          image: ghcr.io/sensebox/sensebox-sketches:pr-159
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+            limits:
+              cpu: "800m"
+              memory: "1Gi"
+          volumeMounts:
+            - name: build-cache
+              mountPath: /root/.cache/arduino
+            - name: shared-tmp
+              mountPath: /tmp
+      volumes:
+        - name: build-cache
+          hostPath:
+            path: /home/ubuntu/compiler/build-cache
+            type: DirectoryOrCreate
+        - name: shared-tmp
+          hostPath:
+            path: /home/ubuntu/compiler/tmp
+            type: DirectoryOrCreate

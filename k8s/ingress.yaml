@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sketch-compiler-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: compiler.k3s.reedu.de
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sketch-compiler
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - compiler.k3s.reedu.de
+    secretName: compiler-k3s-reedu-de-tls
