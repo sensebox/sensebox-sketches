@@ -96,6 +96,7 @@ RUN arduino-cli lib install "RG15-Arduino"
 RUN arduino-cli lib install "Adafruit seesaw Library"
 RUN arduino-cli lib install "ESP32Time"
 RUN arduino-cli lib install "Adafruit MAX1704X"
+RUN arduino-cli lib install "ICM42670P"
 RUN arduino-cli lib install --git-url https://github.com/sensebox/SSD1306-Plot-Library
 RUN arduino-cli lib install --git-url https://github.com/sensebox/sensebox-libweb
 RUN arduino-cli lib install --git-url https://github.com/sensebox/SDS011-select-serial
@@ -106,6 +107,8 @@ RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Ar
 RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
 RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes
 RUN arduino-cli lib install "Adafruit NAU7802 Library"
+
+
 
 
 WORKDIR /app
