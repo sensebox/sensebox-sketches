@@ -45,6 +45,7 @@ RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/$
     cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
     cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
 
+RUN rm -rf /tmp/OTAFiles
 
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet"

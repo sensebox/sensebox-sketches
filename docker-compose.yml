@@ -1,26 +1,29 @@
-version: "2"
-
 services:
   compiler:
-    image: sensebox/sensebox-sketches
+    image: ghcr.io/sensebox/sensebox-sketches:main
     ports:
       - 3000:3000
     networks:
       - compiler-network
     volumes:
-      - build-cache:/app/src/build-cache
+      - build-cache:/root/.cache/arduino
       - sketch-cache:/tmp
 
+
   cleanup:
-    image: alpine:latest
-    command: |
-      /bin/sh -c "
-        set -e
-        IFS=$$'\n\t'
-        eval exec find /tmp/* -type d -maxdepth 0 -mmin +60 | xargs rm -rf
-      "
+    image: mcuadros/ofelia:latest
+    command: daemon --docker
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - sketch-cache:/tmp
+    labels:
+      ofelia.job-local.cleanup.schedule: "@daily"
+      ofelia.job-local.cleanup.command: |
+        /bin/sh -c "
+          set -e
+          IFS=$$'\n\t'
+          eval exec find /tmp/* -type d -maxdepth 0 -mmin +60 | xargs rm -rf
+        "
 
 networks:
   compiler-network:
