@@ -19,8 +19,6 @@ export const boardBinaryFileextensions = {
   "sensebox-esp32s2": "bin",
 };
 
-const baseArgs = ["--build-cache-path", `/app/src/build-cache`];
-
 export const payloadValidator = function payloadValidator(req, res, next) {
   // reject all non application/json requests
   if (
@@ -85,10 +83,9 @@ const execBuilder = async function execBuilder({ board, sketch, buildDir }) {
 
   await spawn(`arduino-cli`, [
     "compile",
-    ...baseArgs,
     "--fqbn",
     boardFQBNs[board],
-    "--build-path",
+    "--output-dir",
     buildDir,
     sketchDir,
   ]);
