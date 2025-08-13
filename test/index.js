@@ -52,7 +52,7 @@ describe("Compiler", () => {
           res.body.should.have
             .property("message")
             .eql(
-              "Invalid board parameter. Valid values are: sensebox-mcu,sensebox,sensebox-esp32s2"
+              "Invalid board parameter. Valid values are: sensebox-mcu,sensebox,sensebox-esp32s2,sensebox-eye"
             );
           done();
         });
