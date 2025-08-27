@@ -98,8 +98,6 @@ const execBuilder = async function execBuilder({
     boardFQBNs[board],
     "--output-dir",
     buildDir,
-    "--jobs",
-    String(2), // Anzahl paralleler Jobs
     sketchDir,
   ]);
 
