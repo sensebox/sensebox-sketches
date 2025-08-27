@@ -73,15 +73,20 @@ export const payloadValidator = function payloadValidator(req, res, next) {
   next();
 };
 
-const execBuilder = async function execBuilder({ board, projectId, sketch, buildDir }) {
+const execBuilder = async function execBuilder({
+  board,
+  projectId,
+  sketch,
+  buildDir,
+}) {
   // const tmpSketchPath = await tempWrite(sketch);
 
   const sketchDir = projectId
     ? `/tmp/${projectId}/sketch`
     : `${temporaryDirectory()}/sketch`;
-    
+
   mkdirSync(sketchDir, {
-    recursive: true
+    recursive: true,
   });
 
   const tmpSketchPath = `${sketchDir}/sketch.ino`;
@@ -93,6 +98,8 @@ const execBuilder = async function execBuilder({ board, projectId, sketch, build
     boardFQBNs[board],
     "--output-dir",
     buildDir,
+    "--jobs",
+    String(2), // Anzahl paralleler Jobs
     sketchDir,
   ]);
 
@@ -120,7 +127,11 @@ export const compileHandler = async function compileHandler(req, res, next) {
     ? `/tmp/${req.body.projectId}`
     : temporaryDirectory();
 
-  req._builderParams = { buildDir, projectId: req.body.projectId, ...req._builderParams };
+  req._builderParams = {
+    buildDir,
+    projectId: req.body.projectId,
+    ...req._builderParams,
+  };
 
   // execute builder with parameters from user
   try {
@@ -138,7 +149,7 @@ export const compileHandler = async function compileHandler(req, res, next) {
     );
   } catch (err) {
     if (process.env.NODE_ENV === "test") {
-      console.error(err.message)
+      console.error(err.message);
     }
     return next(new HTTPError({ error: err.message }));
   }
