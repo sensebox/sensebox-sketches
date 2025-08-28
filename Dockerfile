@@ -8,6 +8,7 @@ ENV ESP32_VERSION=3.3.0
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
+
 RUN apt-get update && apt-get install -y \
   curl \
   gnupg \
@@ -17,6 +18,7 @@ RUN apt-get update && apt-get install -y \
   bash \
   git \
   build-essential
+
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
@@ -45,17 +47,14 @@ RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
 RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ESP32_VERSION}
 
+
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
 # Use these lines to use environment variable in docker
-RUN mkdir -p /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye
 RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/ && \
-    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
-    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
-    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
-    cp /tmp/OTAFiles/partitions-16MB-tinyuf2.csv /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
-    cp /tmp/OTAFiles/pins_arduino.h /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
-    cp /tmp/OTAFiles/tinyuf2.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/
+    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
 
 RUN rm -rf /tmp/OTAFiles
 
@@ -120,8 +119,6 @@ RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Ar
 RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
 RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes
 RUN arduino-cli lib install "Adafruit NAU7802 Library"
-
-
 
 
 WORKDIR /app
