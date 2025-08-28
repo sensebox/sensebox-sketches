@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:22-slim AS base
 
 ENV ARDUINO_CLI_VERSION=1.1.0
 ENV SENSEBOXCORE_VERSION=2.0.0
