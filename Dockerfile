@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 AS base
+FROM node:22-alpine AS base
 
 ENV ARDUINO_CLI_VERSION=1.3.0
 ENV SENSEBOXCORE_VERSION=2.0.0
@@ -8,22 +8,12 @@ ENV ESP32_VERSION=2.0.17
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
-
-RUN apt-get update && apt-get install -y \
-  curl \
-  gnupg \
-  ca-certificates \
-  python3 \
-  python3-serial \
-  bash \
-  git \
-  build-essential
-
-
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs
-
-RUN corepack enable && corepack prepare yarn@stable --activate
+RUN apk update
+RUN apk add curl
+RUN apk add libc6-compat
+RUN apk add bash
+RUN apk add python3
+RUN apk add py3-pyserial
 
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s ${ARDUINO_CLI_VERSION}
 
@@ -46,7 +36,6 @@ RUN arduino-cli --additional-urls ${SENSEBOXCORE_URL} core install sensebox:samd
 # install ESP32
 RUN curl -o /root/.arduino15/package_esp32_index.json ${ESP32CORE_URL}
 RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ESP32_VERSION}
-
 
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
@@ -121,6 +110,8 @@ RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes
 RUN arduino-cli lib install "Adafruit NAU7802 Library"
 
 
+
+
 WORKDIR /app
 
 COPY package.json /app
@@ -129,7 +120,7 @@ COPY yarn.lock /app
 # test stage
 FROM base AS test
 ENV NODE_ENV=test
-RUN yarn install
+RUN yarn install --pure-lockfile
 COPY src /app/src
 COPY test /app/test
 COPY mocha-reporters.json /app
@@ -141,7 +132,7 @@ CMD ["yarn","test"]
 # production stage
 FROM base AS production
 ENV NODE_ENV=production
-RUN yarn install
+RUN yarn install --pure-lockfile --production
 COPY src /app/src
 COPY splash.h ../root/Arduino/libraries/Adafruit_SSD1306/splash.h
 
