@@ -1,19 +1,27 @@
-FROM node:22-alpine AS base
+FROM ubuntu:22.04 AS base
 
-ENV ARDUINO_CLI_VERSION=1.3.0
+ENV ARDUINO_CLI_VERSION=1.1.0
 ENV SENSEBOXCORE_VERSION=2.0.0
 ENV ARDUINO_SAMD_VERSION=1.8.13
 ENV ARDUINO_AVR_VERSION=1.8.5
-ENV ESP32_VERSION=2.0.17
+ENV ESP32_VERSION=3.3.0
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
-RUN apk update
-RUN apk add curl
-RUN apk add libc6-compat
-RUN apk add bash
-RUN apk add python3
-RUN apk add py3-pyserial
+RUN apt-get update && apt-get install -y \
+  curl \
+  gnupg \
+  ca-certificates \
+  python3 \
+  python3-serial \
+  bash \
+  git \
+  build-essential
+
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs
+
+RUN corepack enable && corepack prepare yarn@stable --activate
 
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s ${ARDUINO_CLI_VERSION}
 
@@ -40,10 +48,14 @@ RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ES
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
 # Use these lines to use environment variable in docker
+RUN mkdir -p /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye
 RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/ && \
-    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
+    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/partitions-16MB-tinyuf2.csv /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/pins_arduino.h /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/tinyuf2.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/
 
 RUN rm -rf /tmp/OTAFiles
 
@@ -120,7 +132,7 @@ COPY yarn.lock /app
 # test stage
 FROM base AS test
 ENV NODE_ENV=test
-RUN yarn install --pure-lockfile
+RUN yarn install
 COPY src /app/src
 COPY test /app/test
 COPY mocha-reporters.json /app
@@ -132,7 +144,7 @@ CMD ["yarn","test"]
 # production stage
 FROM base AS production
 ENV NODE_ENV=production
-RUN yarn install --pure-lockfile --production
+RUN yarn install
 COPY src /app/src
 COPY splash.h ../root/Arduino/libraries/Adafruit_SSD1306/splash.h
 
