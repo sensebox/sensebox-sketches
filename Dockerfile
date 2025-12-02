@@ -82,7 +82,7 @@ RUN arduino-cli lib install "phyphox BLE"
 RUN arduino-cli lib install "UniversalTelegramBot"
 RUN arduino-cli lib install "Servo"
 RUN arduino-cli lib install "RTCZero"
-RUN arduino-cli lib install "sensirion-sps@1.1.2"
+RUN arduino-cli lib install --git-url https://github.com/Sensirion/arduino-avr-legacy-i2c-sps30.git#v1.1.2
 RUN arduino-cli lib install "TinyGPSPlus"
 RUN arduino-cli lib install "SenseBoxBLE"
 RUN arduino-cli lib install "Bolder Flight Systems Unit Conversions"
