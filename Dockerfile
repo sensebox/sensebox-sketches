@@ -106,7 +106,7 @@ RUN arduino-cli lib install --git-url https://github.com/sensebox/BMX055-Arduino
 RUN arduino-cli lib install --git-url https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library
 RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Arduino-Library
 RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
-RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes
+RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes#v1.1.0
 RUN arduino-cli lib install "Adafruit NAU7802 Library"
 
 
