@@ -4,7 +4,7 @@ ENV ARDUINO_CLI_VERSION=1.3.0
 ENV SENSEBOXCORE_VERSION=2.0.0
 ENV ARDUINO_SAMD_VERSION=1.8.13
 ENV ARDUINO_AVR_VERSION=1.8.5
-ENV ESP32_VERSION=2.0.17
+ENV ESP32_VERSION=3.3.5
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
@@ -108,7 +108,9 @@ RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Ar
 RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
 RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes#v1.1.0
 RUN arduino-cli lib install "Adafruit NAU7802 Library"
-
+RUN arduino-cli lib install "bsec2"
+RUN arduino-cli lib install "BME68x Sensor library"
+RUN arduino-cli lib install "Sensirion I2C SEN66"
 
 
 
