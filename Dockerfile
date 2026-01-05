@@ -82,7 +82,7 @@ RUN arduino-cli lib install "phyphox BLE"
 RUN arduino-cli lib install "UniversalTelegramBot"
 RUN arduino-cli lib install "Servo"
 RUN arduino-cli lib install "RTCZero"
-RUN arduino-cli lib install "sensirion-sps@1.1.2"
+RUN arduino-cli lib install --git-url https://github.com/Sensirion/arduino-avr-legacy-i2c-sps30.git#v1.1.2
 RUN arduino-cli lib install "TinyGPSPlus"
 RUN arduino-cli lib install "SenseBoxBLE"
 RUN arduino-cli lib install "Bolder Flight Systems Unit Conversions"
@@ -106,9 +106,11 @@ RUN arduino-cli lib install --git-url https://github.com/sensebox/BMX055-Arduino
 RUN arduino-cli lib install --git-url https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library
 RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Arduino-Library
 RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
-RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes
+RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes#v1.1.0
 RUN arduino-cli lib install "Adafruit NAU7802 Library"
-
+RUN arduino-cli lib install "bsec2"
+RUN arduino-cli lib install "BME68x Sensor library"
+RUN arduino-cli lib install "Sensirion I2C SEN66"
 
 
 
