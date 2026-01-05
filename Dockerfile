@@ -1,19 +1,18 @@
-FROM node:22-alpine AS base
+FROM node:22-slim AS base
 
 ENV ARDUINO_CLI_VERSION=1.3.0
 ENV SENSEBOXCORE_VERSION=2.0.0
 ENV ARDUINO_SAMD_VERSION=1.8.13
 ENV ARDUINO_AVR_VERSION=1.8.5
-ENV ESP32_VERSION=2.0.17
+ENV ESP32_VERSION=3.3.5
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
-RUN apk update
-RUN apk add curl
-RUN apk add libc6-compat
-RUN apk add bash
-RUN apk add python3
-RUN apk add py3-pyserial
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s ${ARDUINO_CLI_VERSION}
 
