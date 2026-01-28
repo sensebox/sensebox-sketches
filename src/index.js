@@ -107,6 +107,17 @@ const librariesHandler = function librariesHandler(req, res, next) {
 };
 
 const startServer = function startServer() {
+    const server = createServer({
+      maxHeaderSize: 16 * 1024 * 1024, // 16MB
+    }, app);
+
+    server.on('clientError', (err, socket) => {
+      console.error('Client error:', err);
+      if (socket.writable) {
+        socket.end('HTTP/1.1 413 Payload Too Large\r\n\r\n');
+      }
+    });
+
   app.use(
     morgan(
       ":date[iso] :res[x-backend-server] :remote-addr :req[x-real-ip] :method :url :response-time[0] :status",
@@ -116,14 +127,14 @@ const startServer = function startServer() {
   app.use(responseTime());
   app.use(preflight);
   app.use(preRequestValidator);
-  app.use("/compile", bodyParser.json());
+  app.use("/compile", bodyParser.json({ limit: "100mb" }));
   app.use("/compile", payloadValidator);
   app.use("/compile", compileHandler);
   app.use("/download", downloadHandler);
   app.use("/libraries", librariesHandler);
   app.use(errorHandler);
 
-  createServer(app).listen(3000);
+    server.listen(3000);
   console.log("Compiler started and listening on port 3000!");
 };
 

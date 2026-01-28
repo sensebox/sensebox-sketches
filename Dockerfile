@@ -110,6 +110,7 @@ RUN arduino-cli lib install "Adafruit NAU7802 Library"
 RUN arduino-cli lib install "bsec2"
 RUN arduino-cli lib install "BME68x Sensor library"
 RUN arduino-cli lib install "Sensirion I2C SEN66"
+RUN arduino-cli lib install --git-url https://github.com/sensebox/tflite-micro-arduino-examples
 
 
 
