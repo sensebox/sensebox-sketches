@@ -39,11 +39,18 @@ RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ES
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
 # Use these lines to use environment variable in docker
-RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/ && \
-    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
+RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/
+RUN cp /tmp/OTAFiles/esp32s2/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/esp32s2/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/esp32s2/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
 
+RUN mkdir -p /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye
+RUN cp /tmp/OTAFiles/eye/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/partitions-16MB-tinyuf2.csv /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/pins_arduino.h /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/tinyuf2.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/
 RUN rm -rf /tmp/OTAFiles
 
 # install Libraries with arduino-cli

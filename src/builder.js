@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync, statSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { dirname as _dirname } from "path";
 import { rimraf } from "rimraf";
 import spawn from "spawn-promise";
@@ -94,11 +94,6 @@ const execBuilder = async function execBuilder({
   const tmpSketchPath = `${sketchDir}/sketch.ino`;
   writeFileSync(tmpSketchPath, sketch);
 
-  const sketchStats = statSync(tmpSketchPath);
-  console.log(
-    `Sketch file size: ${sketchStats.size} bytes (${(sketchStats.size / 1024).toFixed(2)} KB)`
-  );
-
   await spawn(`arduino-cli`, [
     "compile",
     "--fqbn",
@@ -107,18 +102,6 @@ const execBuilder = async function execBuilder({
     buildDir,
     sketchDir,
   ]);
-
-  // Print the size of the compiled binary
-  try {
-    const binaryExtension = boardBinaryFileextensions[board];
-    const binaryPath = `${buildDir}/sketch.ino.${binaryExtension}`;
-    const binaryStats = statSync(binaryPath);
-    console.log(
-      `Compiled binary size: ${binaryStats.size} bytes (${(binaryStats.size / 1024).toFixed(2)} KB)`
-    );
-  } catch (error) {
-    console.log(`Could not read binary size: ${error.message}`);
-  }
 
   try {
     const dirname = _dirname(tmpSketchPath);
