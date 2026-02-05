@@ -2,7 +2,7 @@ import fs from "fs";
 import server from "../src/index.js";
 import request from "./setup.js";
 
-describe("Compiler - MCU S2 (ESP32S2)", () => {
+describe("Compiler - EYE", () => {
   let downloadId_esp32s2 = "";
 
   it("should compile an empty sketch for senseBox Eye", (done) => {
