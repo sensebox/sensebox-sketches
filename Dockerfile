@@ -115,7 +115,7 @@ RUN arduino-cli lib install "Ethernet" && \
     arduino-cli lib install --git-url https://github.com/bolderflight/ams5915 && \
     arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes#v1.1.0 && \
     arduino-cli lib install "Adafruit NAU7802 Library" && \
-    arduino-cli lib install "bsec2" && \
+    arduino-cli lib install --git-url https://github.com/boschsensortec/Bosch-BSEC2-Library && \
     arduino-cli lib install "BME68x Sensor library" && \
     arduino-cli lib install "Sensirion I2C SEN66" && \
     arduino-cli lib install --git-url https://github.com/sensebox/tflite-micro-arduino-examples
