@@ -4,7 +4,7 @@ ENV ARDUINO_CLI_VERSION=1.3.0
 ENV SENSEBOXCORE_VERSION=2.0.0
 ENV ARDUINO_SAMD_VERSION=1.8.13
 ENV ARDUINO_AVR_VERSION=1.8.5
-ENV ESP32_VERSION=3.3.5
+ENV ESP32_VERSION=2.0.17
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
