@@ -13,7 +13,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
-  Wire.begin(PIN_QWIIC_SDA,PIN_QWIIC_SCL);
+  Wire.begin();
   Serial.begin(115200);
   delay(100);
 
