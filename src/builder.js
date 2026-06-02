@@ -9,7 +9,7 @@ const boardFQBNs = {
   "sensebox-mcu": "sensebox:samd:sb:power=on",
   sensebox: "arduino:avr:uno",
   "sensebox-esp32s2": "esp32:esp32:sensebox_mcu_esp32s2",
-  "sensebox_eye": "esp32:esp32:sensebox_eye",
+  "sensebox_mcu_eye": "esp32:esp32:sensebox_eye",
 };
 
 const validBoards = Object.keys(boardFQBNs);
@@ -18,7 +18,7 @@ export const boardBinaryFileextensions = {
   "sensebox-mcu": "bin",
   sensebox: "hex",
   "sensebox-esp32s2": "bin",
-  "sensebox_eye": "bin",
+  "sensebox_mcu_eye": "bin",
 };
 
 export const payloadValidator = function payloadValidator(req, res, next) {
