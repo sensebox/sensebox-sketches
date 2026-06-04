@@ -4,7 +4,7 @@ ENV ARDUINO_CLI_VERSION=1.3.0
 ENV SENSEBOXCORE_VERSION=2.0.0
 ENV ARDUINO_SAMD_VERSION=1.8.13
 ENV ARDUINO_AVR_VERSION=1.8.5
-ENV ESP32_VERSION=3.3.5
+ENV ESP32_VERSION=3.3.8
 ENV SENSEBOXCORE_URL=https://raw.githubusercontent.com/mariopesch/senseBoxMCU-core/master/package_sensebox_index.json
 ENV ESP32CORE_URL=https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
@@ -38,79 +38,77 @@ RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ES
 
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
-# Use these lines to use environment variable in docker
-RUN cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/ && \
-    cp /tmp/OTAFiles/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
-    cp /tmp/OTAFiles/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
-
+# esp32s2 variant
+RUN cp /tmp/OTAFiles/esp32s2/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/esp32s2/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
+    cp /tmp/OTAFiles/esp32s2/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
 RUN rm -rf /tmp/OTAFiles
 
 # install Libraries with arduino-cli
-RUN arduino-cli lib install "Ethernet"
-RUN arduino-cli lib install "ArduinoJson"
-RUN arduino-cli lib install "Adafruit HDC1000 Library"
-RUN arduino-cli lib install "Adafruit BME280 Library"
-RUN arduino-cli lib install "Adafruit BMP280 Library"
-RUN arduino-cli lib install "Adafruit BME680 Library"
-RUN arduino-cli lib install "Adafruit DPS310"
-RUN arduino-cli lib install "Adafruit NeoPixel"
-RUN arduino-cli lib install "Adafruit SSD1306"
-RUN arduino-cli lib install "Adafruit GFX Library"
-RUN arduino-cli lib install "Adafruit MQTT Library"
-RUN arduino-cli lib install "Adafruit BusIO"
-RUN arduino-cli lib install "Adafruit SleepyDog Library"
-RUN arduino-cli lib install "Adafruit MPU6050"
-RUN arduino-cli lib install "DallasTemperature"
-RUN arduino-cli lib install "ArduinoBearSSL"
-RUN arduino-cli lib install "ArduinoECCX08"
-RUN arduino-cli lib install "SparkFun SCD30 Arduino Library"
-RUN arduino-cli lib install "SparkFun u-blox GNSS Arduino Library"
-RUN arduino-cli lib install "NewPing"
-RUN arduino-cli lib install "IBM LMIC framework"
-RUN arduino-cli lib install "LoRa Serialization"
-RUN arduino-cli lib install "CayenneLPP"
-RUN arduino-cli lib install "OneWire"
-RUN arduino-cli lib install "Nova Fitness Sds dust sensors library"
-RUN arduino-cli lib install "JC_Button"
-RUN arduino-cli lib install "SD"
-RUN arduino-cli lib install "BSEC Software Library"
-RUN arduino-cli lib install "TheThingsNetwork"
-RUN arduino-cli lib install "NTPClient"
-RUN arduino-cli lib install "phyphox BLE"
-RUN arduino-cli lib install "UniversalTelegramBot"
-RUN arduino-cli lib install "Servo"
-RUN arduino-cli lib install "RTCZero"
-RUN arduino-cli lib install --git-url https://github.com/Sensirion/arduino-avr-legacy-i2c-sps30.git#v1.1.2
-RUN arduino-cli lib install "TinyGPSPlus"
-RUN arduino-cli lib install "SenseBoxBLE"
-RUN arduino-cli lib install "Bolder Flight Systems Unit Conversions"
-RUN arduino-cli lib install "HX711"
-RUN arduino-cli lib install "STM32duino VL53L8CX"
-RUN arduino-cli lib install "Adafruit ICM20X"
-RUN arduino-cli lib install "NeoGPS"
-RUN arduino-cli lib install "Adafruit NeoMatrix"
-RUN arduino-cli lib install "Arduino Low Power"
-RUN arduino-cli lib install "SolarChargerSB041"
-RUN arduino-cli lib install "RG15-Arduino"
-RUN arduino-cli lib install "Adafruit seesaw Library"
-RUN arduino-cli lib install "ESP32Time"
-RUN arduino-cli lib install "Adafruit MAX1704X"
-RUN arduino-cli lib install "ICM42670P"
-RUN arduino-cli lib install --git-url https://github.com/sensebox/SSD1306-Plot-Library
-RUN arduino-cli lib install --git-url https://github.com/sensebox/sensebox-libweb
-RUN arduino-cli lib install --git-url https://github.com/sensebox/SDS011-select-serial
-RUN arduino-cli lib install --git-url https://github.com/sensebox/RV8523-RTC-Arduino-Library
-RUN arduino-cli lib install --git-url https://github.com/sensebox/BMX055-Arduino-Library
-RUN arduino-cli lib install --git-url https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library
-RUN arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Arduino-Library
-RUN arduino-cli lib install --git-url https://github.com/bolderflight/ams5915
-RUN arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes#v1.1.0
-RUN arduino-cli lib install "Adafruit NAU7802 Library"
-RUN arduino-cli lib install --git-url https://github.com/boschsensortec/Bosch-BSEC2-Library
-RUN arduino-cli lib install "BME68x Sensor library"
-RUN arduino-cli lib install "Sensirion I2C SEN66"
-
+RUN arduino-cli lib install "Ethernet" && \
+    arduino-cli lib install "ArduinoJson" && \
+    arduino-cli lib install "Adafruit HDC1000 Library" && \
+    arduino-cli lib install "Adafruit BME280 Library" && \
+    arduino-cli lib install "Adafruit BMP280 Library" && \
+    arduino-cli lib install "Adafruit BME680 Library" && \
+    arduino-cli lib install "Adafruit DPS310" && \
+    arduino-cli lib install "Adafruit NeoPixel" && \
+    arduino-cli lib install "Adafruit SSD1306" && \
+    arduino-cli lib install "Adafruit GFX Library" && \
+    arduino-cli lib install "Adafruit MQTT Library" && \
+    arduino-cli lib install "Adafruit BusIO" && \
+    arduino-cli lib install "Adafruit SleepyDog Library" && \
+    arduino-cli lib install "Adafruit MPU6050" && \
+    arduino-cli lib install "DallasTemperature" && \
+    arduino-cli lib install "ArduinoBearSSL" && \
+    arduino-cli lib install "ArduinoECCX08" && \
+    arduino-cli lib install "SparkFun SCD30 Arduino Library" && \
+    arduino-cli lib install "SparkFun u-blox GNSS Arduino Library" && \
+    arduino-cli lib install "NewPing" && \
+    arduino-cli lib install "IBM LMIC framework" && \
+    arduino-cli lib install "LoRa Serialization" && \
+    arduino-cli lib install "CayenneLPP" && \
+    arduino-cli lib install "OneWire" && \
+    arduino-cli lib install "Nova Fitness Sds dust sensors library" && \
+    arduino-cli lib install "JC_Button" && \
+    arduino-cli lib install "SD" && \
+    arduino-cli lib install "BSEC Software Library" && \
+    arduino-cli lib install "TheThingsNetwork" && \
+    arduino-cli lib install "NTPClient" && \
+    arduino-cli lib install "phyphox BLE" && \
+    arduino-cli lib install "UniversalTelegramBot" && \
+    arduino-cli lib install "Servo" && \
+    arduino-cli lib install "RTCZero" && \
+    arduino-cli lib install --git-url https://github.com/Sensirion/arduino-avr-legacy-i2c-sps30.git#v1.1.2 && \
+    arduino-cli lib install "TinyGPSPlus" && \
+    arduino-cli lib install "SenseBoxBLE" && \
+    arduino-cli lib install "Bolder Flight Systems Unit Conversions" && \
+    arduino-cli lib install "HX711" && \
+    arduino-cli lib install "STM32duino VL53L8CX" && \
+    arduino-cli lib install "Adafruit ICM20X" && \
+    arduino-cli lib install "NeoGPS" && \
+    arduino-cli lib install "Adafruit NeoMatrix" && \
+    arduino-cli lib install "Arduino Low Power" && \
+    arduino-cli lib install "SolarChargerSB041" && \
+    arduino-cli lib install "RG15-Arduino" && \
+    arduino-cli lib install "Adafruit seesaw Library" && \
+    arduino-cli lib install "ESP32Time" && \
+    arduino-cli lib install "Adafruit MAX1704X" && \
+    arduino-cli lib install "ICM42670P" && \
+    arduino-cli lib install --git-url https://github.com/sensebox/SSD1306-Plot-Library && \
+    arduino-cli lib install --git-url https://github.com/sensebox/sensebox-libweb && \
+    arduino-cli lib install --git-url https://github.com/sensebox/SDS011-select-serial && \
+    arduino-cli lib install --git-url https://github.com/sensebox/RV8523-RTC-Arduino-Library && \
+    arduino-cli lib install --git-url https://github.com/sensebox/BMX055-Arduino-Library && \
+    arduino-cli lib install --git-url https://github.com/sensebox/LTR329-Lightsensor-Arduino-Library && \
+    arduino-cli lib install --git-url https://github.com/sensebox/VEML6070-UV-Arduino-Library && \
+    arduino-cli lib install --git-url https://github.com/bolderflight/ams5915 && \
+    arduino-cli lib install --git-url https://github.com/FluxGarage/RoboEyes#v1.1.0 && \
+    arduino-cli lib install "Adafruit NAU7802 Library" && \
+    arduino-cli lib install --git-url https://github.com/boschsensortec/Bosch-BSEC2-Library && \
+    arduino-cli lib install "BME68x Sensor library" && \
+    arduino-cli lib install "Sensirion I2C SEN66" && \
+    arduino-cli lib install --git-url https://github.com/sensebox/tflite-micro-arduino-examples
 
 
 WORKDIR /app

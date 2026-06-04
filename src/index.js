@@ -116,7 +116,7 @@ const startServer = function startServer() {
   app.use(responseTime());
   app.use(preflight);
   app.use(preRequestValidator);
-  app.use("/compile", bodyParser.json());
+  app.use("/compile", bodyParser.json({ limit: "16mb" }));
   app.use("/compile", payloadValidator);
   app.use("/compile", compileHandler);
   app.use("/download", downloadHandler);
