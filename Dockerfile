@@ -42,6 +42,11 @@ COPY ./OTAFiles/ /tmp/OTAFiles/
 RUN cp /tmp/OTAFiles/esp32s2/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
     cp /tmp/OTAFiles/esp32s2/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
     cp /tmp/OTAFiles/esp32s2/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/
+
+# patch pins_arduino.h to add TX1/RX1 defines for XBee UART compatibility
+RUN sed -i '/static const uint8_t RX1 = 18;/a #define TX1 17\n#define RX1 18' \
+    /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/pins_arduino.h
+
 RUN rm -rf /tmp/OTAFiles
 
 # install Libraries with arduino-cli

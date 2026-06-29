@@ -78,4 +78,12 @@ describe("Compiler - MCU S2 (ESP32S2)", () => {
         done();
       });
   });
+
+  it("pins_arduino.h should contain #define TX1 17 and #define RX1 18", () => {
+    const esp32Version = process.env.ESP32_VERSION || "3.3.8";
+    const pinsFile = `/root/.arduino15/packages/esp32/hardware/esp32/${esp32Version}/variants/sensebox_mcu_esp32s2/pins_arduino.h`;
+    const content = fs.readFileSync(pinsFile, "utf8");
+    content.should.include("#define TX1 17");
+    content.should.include("#define RX1 18");
+  });
 });
