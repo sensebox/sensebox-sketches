@@ -38,6 +38,14 @@ RUN arduino-cli --additional-urls ${ESP32CORE_URL} core install esp32:esp32@${ES
 
 COPY ./OTAFiles/ /tmp/OTAFiles/
 
+# fix for MCU Eye v1.5 (can be removed once arduino-esp32 is released with the fix)
+RUN cp /tmp/OTAFiles/eye/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/bootloader-tinyuf2.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/pins_arduino.h /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/tinyuf2.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/eye/variant.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_eye/ && \
+    cp /tmp/OTAFiles/boards.txt /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/
+
 # esp32s2 variant
 RUN cp /tmp/OTAFiles/esp32s2/APOTA.ino /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
     cp /tmp/OTAFiles/esp32s2/APOTA.bin /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/variants/sensebox_mcu_esp32s2/ && \
