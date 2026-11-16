@@ -57,6 +57,9 @@ RUN sed -i '/static const uint8_t RX1 = 18;/a #define TX1 17\n#define RX1 18' \
 
 RUN rm -rf /tmp/OTAFiles
 
+# patch FirmwareMSC.cpp in the esp32 core
+COPY ./arduino-esp32-fixes/FirmwareMSC.cpp /root/.arduino15/packages/esp32/hardware/esp32/${ESP32_VERSION}/cores/esp32/FirmwareMSC.cpp
+
 # install Libraries with arduino-cli
 RUN arduino-cli lib install "Ethernet" && \
     arduino-cli lib install "ArduinoJson" && \
